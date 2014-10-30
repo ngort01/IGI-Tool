@@ -22,3 +22,10 @@ new L.Control.GeoSearch({
 
 // add zoom functionality
 map.addControl(L.control.zoom());
+
+$(document).ready(function() {
+	$("#nav").ferroMenu({
+		position    : "center-bottom", // initial position of the menu in one of the 9 anchor points
+		open	: 200
+	});
+});

@@ -1,8 +1,15 @@
 #map {	
 	position: absolute;
-	top: 0px;
+	top: 98px;
 	bottom: 0px;
 	right: 0px;
 	left: 0px;
-	height: 100%;
+	height: 95%;
+}
+
+.jumbotron {
+	background-color: #151515 !important;
+	opacity:0.95 !important;
+	color: white !important;
+	padding-top: 1px !important;;
 }
