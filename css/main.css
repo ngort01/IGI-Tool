@@ -1,15 +1,59 @@
-#map {	
-	position: absolute;
-	top: 98px;
-	bottom: 0px;
-	right: 0px;
-	left: 0px;
-	height: 95%;
-}
 
+#map {
+  margin-top:0%;
+  box-shadow: 0 8px 19px -8px #222;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #E5E5E5;
+  border-radius: 6px; 
+  }
+
+
+
+body {
+    background-color: #848484;
+    padding-bottom: 200px;
+	background-image: url("../img/bg.jpg");
+}
+	
 .jumbotron {
-	background-color: #151515 !important;
+	box-shadow: 0 8px 0px -8px #222;
 	opacity:0.95 !important;
 	color: white !important;
-	padding-top: 1px !important;;
+	padding-top: 1px !important;
+	border-radius: 3px;
+	padding: 0em 0em;
+	margin-bottom: 0px;
+    	text-shadow: black 0.3em 0.3em 0.3em;
+    	background: transparent !important;
+ 	
+}
+
+#gestures {
+    
+	box-shadow: 0 8px 19px -8px #222;
+	color: white;
+	background-color: #151515;
+	opacity:0.95;
+	border: 1px solid #151515;
+	border-radius: 6px;
+}
+
+#select, #zoom, #pan {
+	border: 1px solid #E5E5E5;
+	border-radius: 6px;
+}
+
+
+.circle-image{
+	position:absolute;
+	top: 88%;
+	left: 85%;
+    width:180px;
+    height:60px;
+    border-radius:50%;
+    background-image:url("http://www.geonetzwerk-muensterland.de/archiv/img/mitgliederlogos/ifgi_logo.jpg");
+    display:block;
+	
 }
