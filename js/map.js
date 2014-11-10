@@ -9,11 +9,11 @@ var map = L.map('map', {
     zoom: 14
 })
 // relative map height			
-$("#map").height($(window).height()-210);
+$("#map").height($(window).height()-160);
 map.invalidateSize();
 
 // gesture panel height
-$("#gestures").height($(window).height()-210);
+$("#gestures").height($(window).height()-160);
 
 // OSM layer
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
