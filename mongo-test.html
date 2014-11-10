@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<!-- <script type="text/javascript" src="js/jquery-2.1.1.js"></script> -->
+		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+	</head>
+	<body>
+	  <!-- ---------- CONTENT ---------- -->
+		<h2>Add a narrative:</h2>
+        <input id="new-title" type="text" size="16" placeholder="Title"/>
+        <input id="new-tags" type="text" size="16" placeholder="tag1, tag2, tag3..."/>
+        <input id="new-text" type="text" size="16" placeholder="Once upon a time..."/>
+        <button id="submit-btn">Submit</button>
+
+		<h2>List of all narratives:</h2>
+		<div class="nar-list"></div>
+		
+		<!-- ---------- SCRIPTS ---------- -->
+		<script type="text/javascript">
+
+			var db_url = "https://api.mongolab.com/api/1/databases/igi-tool-db";
+			var nar_url = db_url + "/collections/narratives";
+			// this key depends on a mongolab user account (not db account)
+			// you may use it for now, but I will change it
+			var api_key = "2Q1SmomE3Hihh_MqC4nshAwWRowZSeiT";
+
+			// adds a new narrative to the database
+			function addNarrative(title, tags, text) {
+
+				jQuery.ajax( { url:  nar_url + "?apiKey=" + api_key,
+					data: JSON.stringify( {"title": title, "tags": tags, "text": text} ),
+					type: "POST",
+					contentType: "application/json" }
+				);
+			}
+
+			// insert document on submit
+			jQuery("#submit-btn").click(function() {
+					addNarrative(jQuery("#new-title").val(),
+							jQuery("#new-tags").val().split(", "),
+							jQuery("#new-text").val());
+				}
+			);
+
+			// creates a list entry for one item
+			function createItemEntry(item_list, item) {
+
+				return "<div><b>Title:</b> " + item.title
+						+ "<br><b>ID:</b> " + item._id.$oid
+						+ "<br><b>Tags:</b> " + item.tags
+						+ "<br><b>Story:</b> " + item.text
+						+ "</div><br>";
+			}
+		
+			// get document
+			jQuery.ajax( { url:  nar_url + "?apiKey=" + api_key,
+				dataType : "json",
+				async : true,
+				type: "GET",
+				success: function(data, status, jqXHR) {
+
+					var item_list = ""
+
+					for (var item of data) {
+					
+						item_list += createItemEntry(item_list, item);
+					}
+
+					jQuery(".nar-list").html(item_list);
+
+
+					}
+				}
+			);
+
+		</script>
+	</body>
+</html>
