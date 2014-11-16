@@ -1,0 +1,163 @@
+{	"title": "Schema set",
+	"description": "Set of all schemas used in this project",
+	"properties": {
+
+		"poi_schema": {
+			"$schema": "http://json-schema.org/schema#",
+			"title": "Point of interest",
+			"description": "a point of interest, which may be connected to multiple stories",
+	
+			"properties": {
+
+				"_id": {
+					"type": "ObjectId",
+					"required": true
+				},
+				"story_id": {
+					"type": "ObjectId",
+					"required": false
+				},
+				"name": {
+					"type": "string",
+					"description": "displayed name",
+					"required": true
+				},
+				"location": {
+					"type": ["Point", "LineString", "Polygon"],
+					"description": "geometry object",
+					"required": true
+				},
+				"description": {
+					"type": "string",
+					"required": false
+				}
+			}
+		},
+
+
+		"story_schema": {
+			"$schema": "http://json-schema.org/schema#",
+			"title": "Story",
+			"description": "a single story, containing text, pictures or other media",
+
+			"properties": {
+
+				"_id": {
+					"type": "ObjectId",
+					"required": true
+				},
+				"poi_id": {
+					"type": "ObjectId",
+					"description": "reference to the POI where the story takes place",
+					"required": true
+				},
+				"tag_id": {
+					"type": "ObjectId",
+					"description": "a list of tag IDs as foreign keys to tag objects",
+					"required": false
+				},
+				"name": {
+					"type": "string",
+					"description": "displayed name",
+					"required": true
+				},
+				"abstract": {
+					"type": "string",
+					"description": "abstract of the storie's content",
+					"required": false
+				},
+				"text": {
+					"type": "string",
+					"description": "a story in written text",
+					"required": false
+				},
+				"picture": {
+					"type": "object",
+					"required": false,
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "displayed name",
+							"required": true
+						},
+						"data": {
+							"type": "BinData",
+							"mime": "string",
+							"required": true
+						}
+					}
+				},
+				"audio": {
+					"type": "object",
+					"required": false,
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "displayed name",
+							"required": true
+						},
+						"data": {
+							"type": "BinData",
+							"mime": "string",
+							"required": true
+						}
+					}
+				},
+				"video": {
+					"type": "object",
+					"required": false,
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "displayed name",
+							"required": true
+						},
+						"data": {
+							"type": "BinData",
+							"mime": "string",
+							"required": true
+						}
+					}
+				}
+			}
+		},
+
+		"route_schema": {
+			"$schema": "http://json-schema.org/schema#",
+			"title": "Route",
+			"description": "list of stories",
+
+			"properties": {
+				"_id": {
+					"type": "ObjectId",
+					"required": true
+				},
+				"name": {
+					"type": "string",
+					"required": true
+				},
+				"story_id": {
+					"type": "ObjectId",
+					"required": false
+				}
+			}
+		},
+
+		"tag_schema": {
+			"$schema": "http://json-schema.org/schema#",
+			"title": "Tag",
+			"description": "pairs of ID and tag name",
+
+			"properties": {
+				"_id": {
+					"type": "ObjectId",
+					"required": true
+				},
+				"name": {
+					"type": "string",
+					"required": true
+				}
+			}
+		}
+	}
+}
