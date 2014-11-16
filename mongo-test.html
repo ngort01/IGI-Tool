@@ -1,30 +1,62 @@
 <!DOCTYPE html>
+
 <html lang="en">
-<html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 		<!-- <script type="text/javascript" src="js/jquery-2.1.1.js"></script> -->
 		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 
+		<style type='text/css'>
+			h2 {
+				font-family: arial, sans-serif;
+				font-weight: bold;
+				font-size: large;
+			}
+			table {
+				width: 67%;
+				font-family: arial, sans-serif;
+			}
+			thead {
+				font-weight: bold;
+				background-color: #CCCCCC;
+			}
+			tbody {
+				background-color: #EEEEEE;
+			}
+			td {
+				padding: 3px;
+			}
+		</style>
+
 	</head>
 	<body>
-	  <!-- ---------- CONTENT ---------- -->
+	<!-- CONTENT -->
 		<h2>Add a narrative:</h2>
         <input id="new-title" type="text" size="16" placeholder="Title"/>
         <input id="new-tags" type="text" size="16" placeholder="tag1, tag2, tag3..."/>
-        <input id="new-text" type="text" size="16" placeholder="Once upon a time..."/>
+        <input id="new-text" type="textbox" size="16" placeholder="Once upon a time..."/>
         <button id="submit-btn">Submit</button>
 
 		<h2>List of all narratives:</h2>
-		<div class="nar-list"></div>
-		
-		<!-- ---------- SCRIPTS ---------- -->
+		<table>
+			<thead>
+				<tr>
+					<td>#</td><td>Title</td><td>Tags</td><td>Story</td>
+				</tr>
+			</thead>
+			<tbody class="nar-list">
+				<tr><td></td><td></td><td></td><td></td></tr>
+			</tbody>
+		</table>
+
+		<br>
+		<div class="bottom-line"></div>
+
+		<!-- SCRIPTS -->
 		<script type="text/javascript">
 
 			var db_url = "https://api.mongolab.com/api/1/databases/igi-tool-db";
 			var nar_url = db_url + "/collections/narratives";
-			// this key depends on a mongolab user account (not db account)
-			// you may use it for now, but I will change it
 			var api_key = "2Q1SmomE3Hihh_MqC4nshAwWRowZSeiT";
 
 			// adds a new narrative to the database
@@ -33,48 +65,95 @@
 				jQuery.ajax( { url:  nar_url + "?apiKey=" + api_key,
 					data: JSON.stringify( {"title": title, "tags": tags, "text": text} ),
 					type: "POST",
-					contentType: "application/json" }
+					async: true,
+					contentType: "application/json;charset=utf-8",
+					success: function (data) {
+
+						getNarratives();
+					},
+					error: function (xhr, status, err) {
+
+						alert("Item '" + title + "' couldn't be added to database.") ;
+					}					
+				});
+			}
+
+			// remove one or more narrativs by title
+			function deleteNarrative(id) {
+
+				if (confirm("Should item '" + id + "' be removed from database?")) {
+					jQuery.ajax( { url: nar_url + "/" + id + "?apiKey=" + api_key,
+						type: "DELETE",
+						async: true,
+						timeout: 300000,
+						success: function (data) {
+
+							getNarratives();
+						},
+						error: function (xhr, status, err) {
+
+							alert("Item '" + id + "' couldn't be removed.") ;
+						}
+					});
+				}
+			}
+
+			// clear and rebuild item table
+			function createItemTable(data) {
+
+				// clear table
+				jQuery(".nar-list").html("");
+
+				// count rows
+				var i = 0;
+
+				// fill table
+				for (var item of data) {
+
+					var text;
+					if (String(item.text).length <= 51) {
+						text = item.text;
+					} else {
+						text = item.text.substring(0, 47) + "...";
+					}
+
+					var row = jQuery("<tr>").append(
+						"<td>" + ++i + "</td>"
+						+ "<td>[<a href='' title='remove " + item._id.$oid + "' onclick='deleteNarrative(\"" + item._id.$oid + "\"); return false;'>x</a>] " + item.title + "</td>"
+						+ "<td>" + item.tags.join(', ') + "</td>"
+						+ "<td>" + text + "</td>"
+					);
+
+					jQuery(".nar-list").append(row);
+				}
+			}
+		
+			// get Narratives
+			function getNarratives() {
+				jQuery.ajax( { url:  nar_url + "?apiKey=" + api_key,
+						dataType : "json",
+						async : true,
+						type: "GET",
+						success: function(data, status, jqXHR) {
+
+							createItemTable(data);
+						}
+					}
 				);
 			}
 
-			// insert document on submit
+			// add submit button functionality
 			jQuery("#submit-btn").click(function() {
-					addNarrative(jQuery("#new-title").val(),
-							jQuery("#new-tags").val().split(", "),
-							jQuery("#new-text").val());
+
+					addNarrative(
+						jQuery("#new-title").val(),
+						jQuery("#new-tags").val().split(", "),
+						jQuery("#new-text").val());
 				}
 			);
 
-			// creates a list entry for one item
-			function createItemEntry(item_list, item) {
-
-				return "<div><b>Title:</b> " + item.title
-						+ "<br><b>ID:</b> " + item._id.$oid
-						+ "<br><b>Tags:</b> " + item.tags
-						+ "<br><b>Story:</b> " + item.text
-						+ "</div><br>";
-			}
-		
-			// get document
-			jQuery.ajax( { url:  nar_url + "?apiKey=" + api_key,
-				dataType : "json",
-				async : true,
-				type: "GET",
-				success: function(data, status, jqXHR) {
-
-					var item_list = ""
-
-					for (var item of data) {
-					
-						item_list += createItemEntry(item_list, item);
-					}
-
-					jQuery(".nar-list").html(item_list);
-
-
-					}
-				}
-			);
+			// get items initially
+			getNarratives();
 
 		</script>
 	</body>
