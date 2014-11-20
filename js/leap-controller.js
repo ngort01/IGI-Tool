@@ -9,12 +9,17 @@ Gestures and corresponding map events
     var self;
     var LEFT_HAND = 0,
         RIGHT_HAND = 1;
+    var leftHandPrev;
     var INDEX_FINGER = 1;
     var handMarkers = [];
     var HEIGHT_OFFSET = 150;
     var BASE_MARKER_SIZE_GRIPPED = 350000,
         BASE_MARKER_SIZE_UNGRIPPED = 500000;
     var zoomLevelAtCircleStart;
+    // axis of the leap motion
+    var X = 0,
+        Y = 1,
+        Z = 2;
 
 
     function LeapController(map) {
@@ -37,9 +42,11 @@ Gestures and corresponding map events
             enableGestures: true
         };
         Leap.loop(controllerOptions, function(frame) {
-			
-			// handmarkers
+
+            // handmarkers
             markHands(frame)
+
+            move(frame);
 
             if (self._isZooming) {
                 return; // Skip this update
@@ -57,6 +64,7 @@ Gestures and corresponding map events
                     }
                 }
             }
+
         });
     }
 
@@ -72,7 +80,7 @@ Gestures and corresponding map events
         if (!bounds) {
             return;
         }
-		
+
         var origin = L.latLng(bounds.getSouthWest().lat, bounds.getCenter().lng);
         var hands = frame.hands;
         //console.log(hands);
@@ -84,8 +92,7 @@ Gestures and corresponding map events
                 }
 
                 var hand = hands[i];
-                newCenter = L.latLng(origin.lat + ((hand.stabilizedPalmPosition[1] - HEIGHT_OFFSET) * scaling), origin.lng 
-										+ (hand.stabilizedPalmPosition[0] * scaling));
+                newCenter = L.latLng(origin.lat + ((hand.stabilizedPalmPosition[1] - HEIGHT_OFFSET) * scaling), origin.lng + (hand.stabilizedPalmPosition[0] * scaling));
 
                 var gripped = isGripped(hand);
                 var baseRadius = gripped ? BASE_MARKER_SIZE_GRIPPED : BASE_MARKER_SIZE_UNGRIPPED;
@@ -99,19 +106,20 @@ Gestures and corresponding map events
                 handMarker.setLatLng(newCenter);
                 handMarker.setRadius(baseRadius * scaling);
                 handMarker.setStyle({
-					color: getHandColor(hand),
+                    color: getHandColor(hand),
                     opacity: 0.8,
                     strokeWeight: 2,
                     fill: true,
                     fillColor: getHandColor(hand),
                     fillOpacity: 0.35,
                 });
-                handMarker.addTo(self.map)
+                //handMarker.addTo(self.map)
             }
+            handMarker.addTo(self.map)
         }
     }
 
-	/**
+    /**
 	Zoom in/out if circle gesture is performed clockwise/ anticlockwise
 	**/
     function zoom(frame, circleGesture) {
@@ -142,14 +150,60 @@ Gestures and corresponding map events
     }
 
 
-	/**
+    /**
+	Function for panning the map
+	**/
+    function move(frame) {
+        // if there is one hand grabbing...
+        if (frame.hands.length > 0 && isGripped(frame.hands[LEFT_HAND])) {
+            var leftHand = frame.hands[LEFT_HAND];
+            var rightHand = frame.hands.length > 1 ? frame.hands[RIGHT_HAND] : undefined;
+
+            // If there was no previous closed position, capture it and exit
+            if (leftHandPrev == null) {
+                leftHandPrev = leftHand;
+                return;
+            }
+
+            // Calculate how much the hand moved
+            var dX = leftHandPrev.stabilizedPalmPosition[X] - leftHand.stabilizedPalmPosition[X];
+            var dY = leftHandPrev.stabilizedPalmPosition[Y] - leftHand.stabilizedPalmPosition[Y];
+            //console.log("Movement: " + dX + ","+dY);
+
+            var center = self.map.getCenter();
+
+            var scaling = 4.0 / Math.pow(2, self.map.getZoom() - 1);
+
+            var newLat = center.lat + dY * scaling;
+            var newLng = center.lng + dX * scaling;
+
+            var newCenter = L.latLng(newLat, newLng);
+
+            self.map.panTo(newCenter)
+
+            leftHandPrev = leftHand;
+
+        } else {
+            // If the left hand is not in a grab position, clear the last hand position
+            if (frame.hands.length > LEFT_HAND && !isGripped(frame.hands[LEFT_HAND]) && leftHandPrev != null) {
+                leftHandPrev = null;
+            }
+        }
+    }
+
+
+
+
+    /////////// Utility Functions ////////////////////
+
+    /**
 	Checks if a hand is gribbed
 	**/
     function isGripped(hand) {
         return hand.grabStrength == 1.0;
     }
 
-	/**
+    /**
 	Check orientation of a circle gesture
 	**/
     function isClockwise(frame, gesture) {
@@ -161,7 +215,7 @@ Gestures and corresponding map events
         return clockwise;
     }
 
-	/**
+    /**
 	Change color of the handmarker depending on its state, gripped or not
 	**/
     function getHandColor(hand) {
