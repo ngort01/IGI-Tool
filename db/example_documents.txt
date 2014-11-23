@@ -91,10 +91,14 @@
 }
 
 
-{	"name": "The storm of 2014"
+{	"name": "The storm of 2014",
+	"description": "Individual stories about the storm and heavy rain in the end of July 2014.",
+	"story_id": [ObjectId(""), ObjectId(""), ObjectId("")]
 }
 
 {	"name": "Churches in Münster"
+	"description": "Tour to some of the many churches.".
+	"story_id": [ObjectId(""), ObjectId(""), ObjectId("")]
 }
 
 {	"name": "storm2014"}
