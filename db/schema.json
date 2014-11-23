@@ -4,7 +4,7 @@
 
 		"poi_schema": {
 			"$schema": "http://json-schema.org/schema#",
-			"title": "Point of interest",
+			"title": "point-of-interest",
 			"description": "a point of interest, which may be connected to multiple stories",
 	
 			"properties": {
@@ -30,14 +30,62 @@
 				"description": {
 					"type": "string",
 					"required": false
+				},
+				"picture": {
+					"type": "object",
+					"required": false,
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "displayed name",
+							"required": true
+						},
+						"data": {
+							"type": "BinData",
+							"mime": "string",
+							"required": true
+						}
+					}
+				},
+				"audio": {
+					"type": "object",
+					"required": false,
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "displayed name",
+							"required": true
+						},
+						"data": {
+							"type": "BinData",
+							"mime": "string",
+							"required": true
+						}
+					}
+				},
+				"video": {
+					"type": "object",
+					"required": false,
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "displayed name",
+							"required": true
+						},
+						"data": {
+							"type": "BinData",
+							"mime": "string",
+							"required": true
+						}
+					}
 				}
 			}
 		},
 
 
-		"story_schema": {
+		"story_element_schema": {
 			"$schema": "http://json-schema.org/schema#",
-			"title": "Story",
+			"title": "story-element",
 			"description": "a single story, containing text, pictures or other media",
 
 			"properties": {
@@ -122,9 +170,9 @@
 			}
 		},
 
-		"route_schema": {
+		"story_schema": {
 			"$schema": "http://json-schema.org/schema#",
-			"title": "Route",
+			"title": "story",
 			"description": "list of stories",
 
 			"properties": {
@@ -135,6 +183,10 @@
 				"name": {
 					"type": "string",
 					"required": true
+				},
+				"description": {
+					"type": "string",
+					"required": false
 				},
 				"story_id": {
 					"type": "ObjectId",
