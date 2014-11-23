@@ -45,7 +45,7 @@ Init
 function init() {
     m = new Map("map");
 	// gesture panel height
-    $("#gestures").height($(window).height() - 160);
+	getPois(m.map);
     var lc = new LeapController(m.map);
     lc.init();
 }
@@ -66,5 +66,6 @@ $(document).ready(function() {
         railColor: 'white',
         railOpacity: 0.4
     });
+	$("#gestures").height($(window).height() - 160);
     init();
 });

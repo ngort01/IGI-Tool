@@ -39,7 +39,7 @@ Gestures and corresponding map events
 
         //Initialize leap loop
         var controllerOptions = {
-            enableGestures: true
+             enableGestures: true, frameEventName: 'animationFrame'
         };
         Leap.loop(controllerOptions, function(frame) {
 
