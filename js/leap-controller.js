@@ -41,6 +41,7 @@ Gestures and corresponding map events
         var controllerOptions = {
              enableGestures: true, frameEventName: 'animationFrame'
         };
+		
         Leap.loop(controllerOptions, function(frame) {
 
             // handmarkers
@@ -63,6 +64,19 @@ Gestures and corresponding map events
                         }
                     }
                 }
+				//Check for gestures - open/close marker
+				if (frame.gestures != null && frame.gestures.length > 0) {
+                    for (var x = 0; x < frame.gestures.length; x++) {
+                        var gesture = frame.gestures[x];
+                        if (gesture.type == "screenTap" && frame.pointable(gesture.pointableIds[0]).type == INDEX_FINGER) {
+							pois.eachLayer(function (layer) {
+								if (handMarker.getBounds().contains(layer.getLatLng())) {
+								 layer.fireEvent("click");
+								}
+							});
+                        }
+                    }
+                }				
             }
 
         });
@@ -97,7 +111,7 @@ Gestures and corresponding map events
                 var gripped = isGripped(hand);
                 var baseRadius = gripped ? BASE_MARKER_SIZE_GRIPPED : BASE_MARKER_SIZE_UNGRIPPED;
 
-                var handMarker = handMarkers[i];
+                handMarker = handMarkers[i];
                 if (!handMarker) {
                     handMarker = new L.circle(newCenter, baseRadius * scaling);
                     handMarkers[i] = handMarker;
