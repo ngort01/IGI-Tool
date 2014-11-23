@@ -98,6 +98,6 @@
 }
 
 {	"name": "storm2014"}
-{	"name": "water"}
+{	"name": "waterbodies"}
 {	"name": "art"}
 {	"name": "church"}
