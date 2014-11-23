@@ -96,8 +96,8 @@
 	"story_id": [ObjectId(""), ObjectId(""), ObjectId("")]
 }
 
-{	"name": "Churches in Münster"
-	"description": "Tour to some of the many churches.".
+{	"name": "Churches in Münster",
+	"description": "Tour to some of the many churches.",
 	"story_id": [ObjectId(""), ObjectId(""), ObjectId("")]
 }
 
