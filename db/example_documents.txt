@@ -1,0 +1,103 @@
+{	"name": "Aasee",
+	"location": {
+		"type": "Point", 
+		"coordinates": [51.949444, 7.603514]
+	},
+	"description": "Aasee in the south-west of Münster"
+}
+
+{	"name": "Münster Cathedral",
+	"location": {
+		"type": "Point", 
+		"coordinates": [51.963056, 7.625556]
+	},
+	"description": "The cathedral church of Saint Paul (St.-Paulus-Dom) is one of Münster's most important historical monuments."
+}
+
+{	"name": "Lamberti church",
+	"location": {
+		"type": "Point", 
+		"coordinates": [51.962917, 7.628611]
+	},
+	"description": "The one with the cages, right at the Prinzipalmarkt."
+}
+
+{	"name": "Martini church",
+	"location": {
+		"type": "Point", 
+		"coordinates": [51.965417, 7.63]
+	},
+	"description": "Another church in Münster."
+}
+
+{	"name": "Renaturated Aa",
+	"location": {
+		"type": "Point", 
+		"coordinates": [51.97389, 7.63412]
+	},
+	"description": "At this part of the 'Münsterische Aa' the formerly concrete bedded stream was renaturated."
+}
+
+{	"name": "Gardens",
+	"location": {
+		"type": "Point", 
+		"coordinates": [51.97056, 7.63975]
+	},
+	"description": "Some gardens."
+}
+
+{	"poi_id": ObjectId(""),
+	"tag_id": [ObjectId(""), ObjectId("")],
+	"name": "Aasee high water",
+	"text": "Once upon a time..."
+}
+
+{	"poi_id": ObjectId(""),
+	"tag_id": ObjectId(""),
+	"name": "Giant Pool Balls",
+	"abstract": "A sculpture by Claes Oldenburg.",
+	"text": "The Giant Pool Balls were created by Claes Oldenburg as contribution to an exhibition of sculptures in public places in 1977."
+}
+
+{	"poi_id": ObjectId(""),
+	"tag_id": [ObjectId(""), ObjectId("")],
+	"name": "Dom",
+	"abstract": "Let's start our tour at the center of Münster.",
+	"text": "Let's start our tour at the center of Münster. Right here (well, at least somewhere around) the first church was built."
+}
+
+{	"poi_id": ObjectId(""),
+	"tag_id": [ObjectId(""), ObjectId("")],
+	"name": "St. Lamberti",
+	"text": "You might have heard the story about these cages."
+}
+
+{	"poi_id": ObjectId(""),
+	"tag_id": [ObjectId(""), ObjectId("")],
+	"name": "St. Martini",
+	"text": "And another one."
+}
+
+{	"poi_id": ObjectId(""),
+	"tag_id": [ObjectId(""), ObjectId("")],
+	"name": "Aa flood plain",
+	"text": "Fire brigade and THW had to work for days to save the houses on the opposite side of the street."
+}
+
+{	"poi_id": ObjectId(""),
+	"tag_id": [ObjectId(""), ObjectId("")],
+	"name": "Gardens like lakes",
+	"text": "There were children bathing and playing in the water, after the rain had stopped."
+}
+
+
+{	"name": "The storm of 2014"
+}
+
+{	"name": "Churches in Münster"
+}
+
+{	"name": "storm2014"}
+{	"name": "water"}
+{	"name": "art"}
+{	"name": "church"}
