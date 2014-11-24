@@ -30,11 +30,14 @@ creates marker and popup
 **/
 function createPois(obj, map) {
 	var lat = obj.location.coordinates[0], lon = obj.location.coordinates[1];
-	var p = new L.marker([lat, lon], {
-		title: obj.name
-	});
-	p.bindPopup("Name: " + obj.name + 
-				"<br> ID: " + obj._id.$oid +
-				"<br> Description: " + obj.description);
-	pois.addLayer(p);
+	// check for invalid coordinates
+	if (!lat == "" && !lon == "") {
+		var p = new L.marker([lat, lon], {
+			title: obj.name
+		});
+		p.bindPopup("Name: " + obj.name + 
+					"<br> ID: " + obj._id.$oid +
+					"<br> Description: " + obj.description);
+		pois.addLayer(p);
+	}
 }
