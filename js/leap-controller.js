@@ -61,20 +61,32 @@ Gestures and corresponding map events
                         var gesture = frame.gestures[x];
                         if (gesture.type == "circle") {
                             zoom(frame, gesture);
-                        }
-                    }
-                }
-				//Check for gestures - open/close marker
-				if (frame.gestures != null && frame.gestures.length > 0) {
-                    for (var x = 0; x < frame.gestures.length; x++) {
-                        var gesture = frame.gestures[x];
-                        if (gesture.type == "screenTap" && frame.pointable(gesture.pointableIds[0]).type == INDEX_FINGER) {
+						//Check for gestures - open/close marker
+                        } else if (gesture.type == "screenTap" && frame.pointable(gesture.pointableIds[0]).type == INDEX_FINGER) {
+						
 							pois.eachLayer(function (layer) {
 								if (handMarker.getBounds().contains(layer.getLatLng())) {
 								 layer.fireEvent("click");
 								}
 							});
-                        }
+                        } else if (gesture.type == "swipe" && frame.hands[0].type == "left") {
+							//Classify swipe as either horizontal or vertical
+							var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+							if(isHorizontal){
+								if(gesture.direction[0] > 0){
+									swipeDirection = "right";
+								} else {
+									swipeDirection = "left";
+								}
+							} else { //vertical
+								if(gesture.direction[1] > 0){ // swipe up -> scroll down
+									//console.log("swipe");
+									$('#gestures').slimScroll({ scrollBy: '20px' });
+								} else { // swipe down -> scroll up
+									$('#gestures').slimScroll({ scrollBy: '-20px' });
+								}
+							}
+						}
                     }
                 }				
             }
