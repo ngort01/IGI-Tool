@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<!-- <script type="text/javascript" src="js/jquery-2.1.1.js"></script> -->
+		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+		<style type='text/css'>
+			h2 {
+				font-family: arial, sans-serif;
+				font-weight: bold;
+				font-size: large;
+			}
+			h3 {
+				font-family: arial, sans-serif;
+				font-weight: bold;
+				font-size: medium;
+			}
+			table {
+				width: 67%;
+				font-family: arial, sans-serif;
+			}
+			thead {
+				font-weight: bold;
+				background-color: #CCCCCC;
+			}
+			tbody {
+				background-color: #EEEEEE;
+			}
+			td {
+				padding: 3px;
+			}
+			a.del {
+				font-weight: bold;
+				text-decoration: none;
+			}
+			a.poi {
+				font-weight: bold;
+				text-decoration: none;
+			}
+		</style>
+
+	</head>
+	<body>
+	<!-- CONTENT -->
+		<h2>List of all stories:</h2>
+		<table>
+			<thead>
+				<tr>
+					<td>#</td><td>Name</td><td>Elements</td><td>Description</td><td>DEL</td>
+				</tr>
+			</thead>
+			<tbody id="story-list">
+				<tr><td></td><td></td><td></td><td></td><td></td></tr>
+			</tbody>
+		</table>
+
+		<h3>Add a new story:</h3>
+        <input id="new-st-name" type="text" size="16" placeholder="Name"/>
+        <input id="new-st-description" type="text" size="32" placeholder="Description"/>
+        <button id="submit-btn-st">Submit</button>
+		<br>
+		<br>
+
+		<h2>List of all story elements:</h2>
+		<table>
+			<thead>
+				<tr>
+					<td>#</td><td>Name</td><td>Tags</td><td>Abstract</td><td>Text</td><td>POI</td><td>DEL</td>
+				</tr>
+			</thead>
+			<tbody id="story-element-list">
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			</tbody>
+		</table>
+
+		<h3>Add a new story element:</h3>
+        <input id="new-se-name" type="text" size="16" placeholder="Name"/>
+        <select id="new-se-tags" type="text" size="1" placeholder="Select tag(s)"/>
+        <input id="new-se-abstract" type="text" size="16" placeholder="Abstract"/>
+        <input id="new-se-text" type="textbox" size="16" placeholder="Text"/>
+        <select id="new-se-poi" size="1" placeholder="Select POI"></select>
+        <button id="submit-btn-se">Submit</button>
+		<br>
+		<br>
+
+		<h2>List of all points of interest:</h2>
+		<table>
+			<thead>
+				<tr>
+					<td>#</td><td>Name</td><td>Description</td><td>Location</td><td>DEL</td>
+				</tr>
+			</thead>
+			<tbody id="poi-list">
+				<tr><td></td><td></td><td></td><td></td><td></td></tr>
+			</tbody>
+		</table>
+
+		<h3>Add a new point of interest:</h3>
+        <input id="new-poi-name" type="text" size="16" placeholder="Name"/>
+        <input id="new-poi-description" type="text" size="16" placeholder="Interesting spot."/>
+        <input id="new-poi-lat" type="text" size="8" placeholder="51.96"/>
+        <input id="new-poi-lon" type="text" size=8" placeholder="7.63"/>
+        <button id="submit-btn-poi">Submit</button>
+		<br>
+		<br>
+
+		<h2>List of all tags:</h2>
+		<table>
+			<thead><tr><td>Names</td></tr></thead>
+			<tbody><tr><td id="tag-list"/></tr></tbody>
+		</table>
+		<h3>Add a new tag:</h3>
+        <input id="new-tag-name" type="text" size="16" placeholder="Name"/>
+        <button id="submit-btn-tag">Submit</button>
+
+		<!-- SCRIPTS -->
+		<script type="text/javascript">
+
+			var db_url = "https://api.mongolab.com/api/1/databases/igi-tool-db";
+			var poi_url = db_url + "/collections/pois";
+			var story_elem_url = db_url + "/collections/story-elements";
+			var story_url = db_url + "/collections/stories";
+			var tag_url = db_url + "/collections/tags";
+			var api_key = "2Q1SmomE3Hihh_MqC4nshAwWRowZSeiT";
+
+			var tag_cache;
+
+			// //////////////////////////////////////////////////
+			// stories
+			
+			// get stories
+			function getStories() {
+				jQuery.ajax( { url:  story_url + "?apiKey=" + api_key,
+						dataType : "json",
+						async : true,
+						type: "GET",
+						success: function(data, status, jqXHR) {
+
+							createStoryTable(data);
+						}
+					}
+				);
+			}
+
+			// clear and rebuild story table
+			function createStoryTable(data) {
+
+				// clear table
+				jQuery("#story-list").html("");
+
+				// count rows
+				var i = 0;
+
+				// fill table
+				for (var item of data) {
+
+					var description;
+					if (typeof item.description == "undefined") {
+						description = "";
+					} else if (String(item.description).length <= 51) {
+						description = item.description;
+					} else {
+						description = item.description.substring(0, 47) + "...";
+					}
+
+					var elements;
+					if (item.story_id instanceof Array && item.story_id.length > 0) {
+
+						elements = item.story_id[0].$oid;
+
+						for (var j = 1; j < item.story_id.length; j++) {
+							elements += ", " + item.story_id[j].$oid;
+						}
+					} else if (typeof item.story_id !== "undefined") {
+						elements = item.story_id.$oid;
+					} else {
+						elements = "";
+					}
+					
+					var row = jQuery("<tr>").append(
+						"<td>" + ++i + "</td>"
+						+ "<td>" + item.name + "</td>"
+						+ "<td>" + elements + "</td>"
+						+ "<td>" + description + "</td>"
+						+ "<td>x</td>"
+					//	+ "<td><a href='' class='del' title='remove " + item._id.$oid + "' onclick='deleteStory(\"" + item._id.$oid + "\"); return false;'>x</a></td>"
+					);
+
+					jQuery("#story-list").append(row);
+				}
+			}
+
+			// remove one story by id
+			function deleteStory(id) {
+
+				if (confirm("Should item '" + id + "' be removed from database?")) {
+					jQuery.ajax( { url: story_url + "/" + id + "?apiKey=" + api_key,
+						type: "DELETE",
+						async: true,
+						timeout: 300000,
+						success: function (data) {
+
+							getStories();
+						},
+						error: function (xhr, status, err) {
+
+							alert("Item '" + id + "' couldn't be removed.") ;
+						}
+					});
+				}
+			}
+
+			// adds a new story to the database
+			function addStory(name, description) {
+
+				jQuery.ajax( { url:  story_url + "?apiKey=" + api_key,
+					data: JSON.stringify( {"name": name, "description": description} ),
+					type: "POST",
+					async: true,
+					contentType: "application/json;charset=utf-8",
+					success: function (data) {
+
+						getStories();
+					},
+					error: function (xhr, status, err) {
+
+						alert("Item '" + name + "' couldn't be added to database.") ;
+					}					
+				});
+			}
+
+			// //////////////////////////////////////////////////
+			// story elements
+			
+			// get story elements
+			function getStoryElements() {
+				jQuery.ajax( { url:  story_elem_url + "?apiKey=" + api_key,
+						dataType : "json",
+						async : true,
+						type: "GET",
+						success: function(data, status, jqXHR) {
+
+							createStoryElementTable(data);
+						}
+					}
+				);
+			}
+
+			// clear and rebuild item table
+			function createStoryElementTable(data) {
+
+				// clear table
+				jQuery("#story-element-list").html("");
+
+				// count rows
+				var i = 0;
+
+				// fill table
+				for (var item of data) {
+
+					var abstract;
+					if (typeof item.abstract == "undefined") {
+						abstract = "";
+					} else if (String(item.abstract).length <= 51) {
+						abstract = item.abstract;
+					} else {
+						abstract = item.abstract.substring(0, 47) + "...";
+					}
+
+					var text;
+					if (typeof item.text == "undefined") {
+						text = "";
+					} else if (String(item.text).length <= 51) {
+						text = item.text;
+					} else {
+						text = item.text.substring(0, 47) + "...";
+					}
+
+					var tags;
+					if (item.tag_id instanceof Array && item.tag_id.length > 0) {
+
+						tags = getTagName(item.tag_id[0].$oid);
+
+						for (var j = 1; j < item.tag_id.length; j++) {
+							tags += ", " + getTagName(item.tag_id[j].$oid);
+						}
+					} else {
+						tags = getTagName(item.tag_id.$oid);
+					}
+					
+					var row = jQuery("<tr>").append(
+						"<td>" + ++i + "</td>"
+						+ "<td>" + item.name + "</td>"
+						+ "<td>" + tags + "</td>"
+						+ "<td>" + abstract + "</td>"
+						+ "<td>" + text + "</td>"
+						+ "<td><a class='poi' href='#poi" + item.poi_id.$oid + "' title='to point of interest'>go</a></td>"
+						+ "<td><a href='' class='del' title='remove " + item._id.$oid + "' onclick='deleteStoryElement(\"" + item._id.$oid + "\"); return false;'>x</a></td>"
+					);
+
+					jQuery("#story-element-list").append(row);
+				}
+			}
+
+			// remove one story element by id
+			function deleteStoryElement(id) {
+
+				if (confirm("Should item '" + id + "' be removed from database?")) {
+					jQuery.ajax( { url: story_elem_url + "/" + id + "?apiKey=" + api_key,
+						type: "DELETE",
+						async: true,
+						timeout: 300000,
+						success: function (data) {
+
+							getStoryElements();
+						},
+						error: function (xhr, status, err) {
+
+							alert("Item '" + id + "' couldn't be removed.") ;
+						}
+					});
+				}
+			}
+
+			// adds a new story element to the database
+			function addStoryElement(poi_id, name, tag_id, abstract, text) {
+
+				// TODO add multiple new tags
+				// TODO get IDs to all tags to insert story
+
+
+				jQuery.ajax( { url:  story_elem_url + "?apiKey=" + api_key,
+					data: JSON.stringify( {"poi_id": {"$oid": poi_id}, "name": name, "tag_id": {"$oid": tag_id}, "text": text, "abstract": abstract} ),
+					type: "POST",
+					async: true,
+					contentType: "application/json;charset=utf-8",
+					success: function (data) {
+
+						getStoryElements();
+					},
+					error: function (xhr, status, err) {
+
+						alert("Item '" + name + "' couldn't be added to database.") ;
+					}					
+				});
+			}
+
+			// //////////////////////////////////////////////////
+			// POINTS OF INTEREST
+
+			// get points of interest
+			function getPois() {
+				jQuery.ajax( { url:  poi_url + "?apiKey=" + api_key,
+						dataType : "json",
+						async : true,
+						type: "GET",
+						success: function(data, status, jqXHR) {
+
+							createPoiSelection(data);
+							createPoiTable(data);
+						}
+					}
+				);
+			}
+
+			// add poi to selection list for new story elements
+			function createPoiSelection(data) {
+
+				jQuery("#new-se-poi").html("");
+
+				for (var item of data) {
+
+					var poi = "<option value='" + item._id.$oid + "'>" + item.name + "</option>"
+
+					jQuery("#new-se-poi").append(poi);
+				}
+			}
+
+			// creates a table of points of interes
+			function createPoiTable(data) {
+
+				// clear table
+				jQuery("#poi-list").html("");
+
+				// count rows
+				var i = 0;
+
+				// fill table
+				for (var item of data) {
+
+					var description;
+					if (typeof item.description == "undefined") {
+						description = "";
+					} else if (String(item.description).length <= 51) {
+						description = item.description;
+					} else {
+						description = item.description.substring(0, 47) + "...";
+					}
+					
+					var row = jQuery("<tr>").append(
+						"<td>" + ++i + "</td>"
+						+ "<td><a name='poi" + item._id.$oid + "'>" + item.name + "</a></td>"
+						+ "<td>" + description + "</td>"
+						+ "<td>" + formatLocation(item.location) + "</td>"
+						+ "<td>x</td>"
+					//	+ "<td><a href='' class='del' title='remove " + item._id.$oid + "' onclick='deletePoi(\"" + item._id.$oid + "\"); return false;'>x</a></td>"
+					);
+
+					jQuery("#poi-list").append(row);
+				}
+			}
+
+			// remove one POI by id
+			function deletePoi(id) {
+
+				var used = true;
+
+				jQuery.ajax( { url: db_url + "/runCommand?apiKey=" + api_key,
+							data: JSON.stringify( {"distinct": "story-elements", "key": "poi_id", "query": {"$oid": id} } ),
+							type: "POST",
+							async: true,
+							timeout: 300000,
+							contentType: "application/json;charset=utf-8",
+							success: function (data) {
+
+								console.log(data);
+
+								if (typeof data == "undefined") {
+
+									alert("Müsste gehen...");
+								}
+								else {
+									alert("POI '" + id + "' cannot be removed as long as there are story elements using it.") ;
+								}
+							},
+							error: function (xhr, status, err) {
+
+								used = false;
+							}
+						});
+				
+				if (!used) {
+					if (confirm("Should item '" + id + "' be removed from database?")) {
+						jQuery.ajax( { url: poi_url + "/" + id + "?apiKey=" + api_key,
+							type: "DELETE",
+							async: true,
+							timeout: 300000,
+							success: function (data) {
+
+								getPois();
+							},
+							error: function (xhr, status, err) {
+
+								alert("Item '" + id + "' couldn't be removed.") ;
+							}
+						});
+					}
+				}
+			}
+
+			// adds a new tag to the database and returns it's id
+			function addPoi(name, description, lat, lon) {
+
+				jQuery.ajax( { url:  poi_url + "?apiKey=" + api_key,
+					data: JSON.stringify( {"name": name, "description": description,
+							"location":{"type": "Point", "coordinates": [lat, lon]}
+						} ),
+					type: "POST",
+					async: true,
+					contentType: "application/json;charset=utf-8",
+					success: function (data) {
+
+						getPois();
+					},
+					error: function (xhr, status, err) {
+
+						alert("POI '" + name + "' couldn't be added to database.") ;
+					}					
+				});
+			}
+
+			// //////////////////////////////////////////////////
+			// TAGS
+
+			// get tags
+			function getTags() {
+				jQuery.ajax( { url:  tag_url + "?apiKey=" + api_key,
+						dataType : "json",
+						async : true,
+						type: "GET",
+						success: function(data, status, jqXHR) {
+
+							tag_cache = data;
+							createTagSelection(data);
+							showTags();
+						}
+					}
+				);
+			}
+
+			// show all cached tags
+			function showTags() {
+
+				if (tag_cache instanceof Array && tag_cache.length > 0) {
+
+					var tag_list = tag_cache[0].name;
+
+					for (var i = 1; i < tag_cache.length; i++) {
+						tag_list += ", " + tag_cache[i].name;
+					}
+
+					jQuery("#tag-list").html(tag_list);
+				}
+			}
+
+			// add tag to selection list for new story elements
+			function createTagSelection(data) {
+
+				jQuery("#new-se-tags").html("");
+
+				for (var item of data) {
+
+					var tag = "<option value='" + item._id.$oid + "'>" + item.name + "</option>"
+
+					jQuery("#new-se-tags").append(tag);
+				}
+			}
+			
+			// get tag name from the cached list of tags
+			function getTagName(id) {
+
+				if (tag_cache instanceof Array) {
+					for (var tag of tag_cache) {
+						if (tag._id.$oid == id) {
+							return tag.name;
+						}
+					}
+				}
+			}
+
+			// get tag id from the cached list of tags
+			function getTagId(name) {
+
+				if (tag_cache instanceof Array) {
+					for (var tag of tag_cache) {
+						if (tag.name == name) {
+							return tag._id.$oid;
+						}
+					}
+				}
+			}
+
+			// adds a new tag to the database and returns it's id
+			function addTag(name) {
+
+				jQuery.ajax( { url:  tag_url + "?apiKey=" + api_key,
+					data: JSON.stringify( {"name": name} ),
+					type: "POST",
+					async: true,
+					contentType: "application/json;charset=utf-8",
+					success: function (data) {
+
+						getTags();
+					},
+					error: function (xhr, status, err) {
+
+						alert("Tag '" + name + "' couldn't be added to database.") ;
+					}					
+				});
+			}
+
+			// //////////////////////////////////////////////////
+			// OTHERS
+
+			// format location
+			function formatLocation(location) {
+
+				if (location.type == "Point") {
+					return location.coordinates[0] + ", " + location.coordinates[1]
+				}
+			}
+
+			jQuery("#submit-btn-st").click(function() {
+
+					addStory(
+						jQuery("#new-st-name").val(),
+						jQuery("#new-st-description").val());
+				}
+			);
+			jQuery("#submit-btn-se").click(function() {
+
+					addStoryElement(
+						jQuery("#new-se-poi").val(),
+						jQuery("#new-se-name").val(),
+						jQuery("#new-se-tags").val(),
+						jQuery("#new-se-abstract").val(),
+						jQuery("#new-se-text").val());
+				}
+			);
+			jQuery("#submit-btn-poi").click(function() {
+
+					addPoi(
+						jQuery("#new-poi-name").val(),
+						jQuery("#new-poi-description").val(),
+						jQuery("#new-poi-lat").val(),
+						jQuery("#new-poi-lon").val());
+				}
+			);
+			jQuery("#submit-btn-tag").click(function() {
+
+					addTag(
+						jQuery("#new-tag-name").val());
+				}
+			);
+
+			// get items initially
+			getTags();
+			getStories();
+			getPois();
+			getStoryElements();
+
+		</script>
+	</body>
+</html>
