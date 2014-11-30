@@ -20,7 +20,7 @@ Gestures and corresponding map events
     var X = 0,
         Y = 1,
         Z = 2;
-
+	var newCenter; // leaflet coordinates of the stabilizedPalmPosition
 
     function LeapController(map) {
         self = this;
@@ -92,6 +92,17 @@ Gestures and corresponding map events
             }
 			} else {
 				controlMenu(frame);
+			} 
+			
+			// place POI by pinching
+			if (frame.hands != null && frame.hands.length > 0) {
+				if (frame.hands[0].pinchStrength > 0.9 && settingPOI == true) {
+					POI.setLatLng(newCenter);
+				} else if (frame.hands[0].pinchStrength == 0 && settingPOI == true) {
+					settingPOI = false;
+					//pois.clearLayers();
+					//getPois(m.map);
+				}
 			}
         });
     }
@@ -232,6 +243,8 @@ Gestures and corresponding map events
 	menuItems = $('#nav').find('a');			// menu items
 	prevMenuItem = null;						// previous selected menu items
 	curMenuItem = 0;							// currently selected menu item
+	var POI = null;
+	var settingPOI = false;						// toggle POI setting modus
 
 	/**
 	menu control with gestures
@@ -252,7 +265,15 @@ Gestures and corresponding map events
 		
 			$(menuItems[prevMenuItem]).css({"opacity": "1", "box-shadow":"none"});
 			$(menuItems[curMenuItem]).css({"opacity": "0.8", "box-shadow": "0px 0px 5px 3px #FFFFFF inset"}); // highlight currently selected menu item
-		
+			
+			// if POI creation is selected by pinching
+			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.9) {
+				//console.log(frame.hands[0].pinchStrength);
+				$.fn.ferroMenu.toggleMenu("#nav"); // close menu -> map interaction is enabled
+				POI = L.marker(newCenter);
+				pois.addLayer(POI);
+				settingPOI = true;
+			}
 			prevMenuItem = curMenuItem;
 		}
 	}
