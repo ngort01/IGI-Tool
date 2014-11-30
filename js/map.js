@@ -39,6 +39,7 @@
 
 
 var m = null;
+var paused = false;
 /**
 Init
 **/
@@ -58,6 +59,16 @@ $(document).ready(function() {
         position: "center-bottom", // initial position of the menu in one of the 9 anchor points
         open: 100
     });
+	
+	$(document).on("menuopened",function(){
+        paused = true; // pause map interactions when the menu is opened
+    });
+	
+	$(document).on("menuclosed",function(){
+        paused = false; // start map interactions when the menu is closed
+		$(menuItems[curMenuItem]).css({"opacity": "1", "box-shadow":"none"});
+    });
+	
     // slim scrollbar settings
     $('#gestures').slimScroll({
         height: "$(window).height()-250",
@@ -66,6 +77,8 @@ $(document).ready(function() {
         railColor: 'white',
         railOpacity: 0.4
     });
-	$("#gestures").height($(window).height() - 160);
+	
+	$("#gestures").height($(window).height() - 160); //gesture panel height
+	
     init();
 });

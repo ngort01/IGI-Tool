@@ -43,7 +43,7 @@ Gestures and corresponding map events
         };
 		
         Leap.loop(controllerOptions, function(frame) {
-
+			if (!paused) { // map interactions paused if menu is opened
             // handmarkers
             markHands(frame)
 
@@ -90,11 +90,17 @@ Gestures and corresponding map events
                     }
                 }				
             }
-
+			} else {
+				controlMenu(frame);
+			}
         });
     }
 
-
+	
+	///////////////////////////////////////////////////
+	///////////////////Map Controls ///////////////////
+	///////////////////////////////////////////////////
+	
 
     /**
 	Represent hands as circles on the map
@@ -217,11 +223,45 @@ Gestures and corresponding map events
         }
     }
 
+	
+	///////////////////////////////////////////////////
+	/////////////// Menu Controls  ////////////////////
+	///////////////////////////////////////////////////
+	
+	NumMenuItems = $('#nav').find('a').length; 	// number of menu items
+	menuItems = $('#nav').find('a');			// menu items
+	prevMenuItem = null;						// previous selected menu items
+	curMenuItem = 0;							// currently selected menu item
 
+	/**
+	menu control with gestures
+	**/
+	function controlMenu(frame) {
+		if (frame.hands.length > 0 && frame.hands[0].type == "right") {
+			var roll = frame.hands[0].roll()* 180/Math.PI; // hand rotation around leap z axis in degrees
+			if (roll > 0 && roll < 90) {
+				curMenuItem = 0; 
+			} else if (0 > roll && roll > -90) {
+				curMenuItem = 1;
+			}
+			
+			if (prevMenuItem == null) {
+				prevMenuItem = curMenuItem;
+				return;
+			}
+		
+			$(menuItems[prevMenuItem]).css({"opacity": "1", "box-shadow":"none"});
+			$(menuItems[curMenuItem]).css({"opacity": "0.8", "box-shadow": "0px 0px 5px 3px #FFFFFF inset"}); // highlight currently selected menu item
+		
+			prevMenuItem = curMenuItem;
+		}
+	}
+	
 
-
+	///////////////////////////////////////////////////
     /////////// Utility Functions ////////////////////
-
+	///////////////////////////////////////////////////
+	
     /**
 	Checks if a hand is gribbed
 	**/
