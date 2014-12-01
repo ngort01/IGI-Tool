@@ -180,6 +180,11 @@
 					"type": "ObjectId",
 					"required": true
 				},
+				"tag_id": {
+					"type": "ObjectId",
+					"description": "a list of tag IDs as foreign keys to tag objects",
+					"required": false
+				},
 				"name": {
 					"type": "string",
 					"required": true
@@ -188,7 +193,7 @@
 					"type": "string",
 					"required": false
 				},
-				"story_id": {
+				"story_element_id": {
 					"type": "ObjectId",
 					"required": false
 				}
