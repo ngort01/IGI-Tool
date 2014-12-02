@@ -74,9 +74,11 @@ function addPoi(name, description, lat, lon) {
 
 
 /**
-Set POI on the map
+Set POI on the map by mouse click 
 **/
 
-function setPOI() {
-
+function setPOI(e) {
+	POI = new L.marker(e.latlng);
+	pois.addLayer(POI);
+	m.map.off('click', setPOI); // turn off map event
 }
