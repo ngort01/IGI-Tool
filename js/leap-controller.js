@@ -100,8 +100,9 @@ Gestures and corresponding map events
 					POI.setLatLng(newCenter);
 				} else if (frame.hands[0].pinchStrength == 0 && settingPOI == true) {
 					settingPOI = false;
-					//pois.clearLayers();
-					//getPois(m.map);
+					$('#POImodal').modal('toggle') // open poi creation form
+					$("#lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
+					$("#lon").val(POI.getLatLng().lng);
 				}
 			}
         });

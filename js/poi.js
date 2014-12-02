@@ -81,4 +81,7 @@ function setPOI(e) {
 	POI = new L.marker(e.latlng);
 	pois.addLayer(POI);
 	m.map.off('click', setPOI); // turn off map event
+	$('#POImodal').modal('toggle') // open poi creation form
+	$("#lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
+	$("#lon").val(POI.getLatLng().lng);
 }

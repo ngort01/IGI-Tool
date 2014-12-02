@@ -4,38 +4,75 @@
 <head>
     <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
     <meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IGI - Tool</title>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
     <link rel="stylesheet" href="css/main.css" />
-	<link rel="stylesheet" href="css/l.geosearch.css" />
-	<link rel="stylesheet" href="css/jquery.ferro.ferroMenu.css" />
-	<link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/l.geosearch.css" />
+    <link rel="stylesheet" href="css/jquery.ferro.ferroMenu.css" />
+    <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 
-	</head>
+</head>
 
 <body style="overflow: hidden">
-	 <hr />
-	 <!--<div class="circle-image"; ></div>-->
-	 <!-- Navigation -->
+
+    <!-- Modals -->
+    <div class="modal fade" id="POImodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Enter POI Information</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="name" class="control-label">Name:</label>
+                            <input type="text" class="form-control" id="name">
+                        </div>
+						<div class="form-group">
+                            <label for="lat" class="control-label">Lat:</label>
+                            <input type="number" class="form-control" id="lat" value = "" disabled>
+                        </div>
+						<div class="form-group">
+                            <label for="lon" class="control-label">Lon:</label>
+                            <input type="number" class="form-control" id="lon" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="control-label">Description:</label>
+                            <textarea class="form-control" id="description"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+	
+    <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-					
+
                 </button>
-				                             
+
 
                 <a class="navbar-brand" href="#">Projectname</a>
-				<hr>
-				
-			</div>
+                <hr>
+
+            </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -48,85 +85,83 @@
                     </li>
                     <li>
                         <a href="javascript:speechButton(event);">Start Speech Recognition</a>
-                    </li>					
+                    </li>
                 </ul>
             </div>
-			
-			
             <!-- /.navbar-collapse -->
         </div>
-		
-		
         <!-- /.container -->
     </nav>
-	
-   
-   	<!-------------------- Grid layout ----------------->
-	<div class="container-fluid">
-      <div class="row">
-        <div class="col-md-1">
-			<div id="gestures" class="panel panel-default">
-				<div class="panel-body">
-					<div id="pan">
-						<img src="img/pan.png" class="img-responsive center-block">
-					</div>
-					<div id="zoom">
-						<img src="img/zoom.png" class="img-responsive center-block">
-					</div>
-					<div id="select">
-						<img src="img/select.png" class="img-responsive center-block">
-					</div>
-					<div id="select">
-						<img src="img/select.png" class="img-responsive center-block">
-					</div>
-					<div id="select">
-						<img src="img/select.png" class="img-responsive center-block">
-					</div>
-					<div id="select">
-						<img src="img/select.png" class="img-responsive center-block">
-					</div>
-					<div id="select">
-						<img src="img/select.png" class="img-responsive center-block">
-					</div>	
-					<div id="select">
-						<img src="img/select.png" class="img-responsive center-block">
-					</div>	
-					<div id="select">
-						<img src="img/select.png" class="img-responsive center-block">
-					</div>	
-					<div id="select">
-						<img src="img/select.png" class="img-responsive center-block">
-					</div>						
-				</div>
-			</div>
+
+
+    <!-------------------- Grid layout ----------------->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-1">
+                <div id="gestures" class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="pan">
+                            <img src="img/pan.png" class="img-responsive center-block">
+                        </div>
+                        <div id="zoom">
+                            <img src="img/zoom.png" class="img-responsive center-block">
+                        </div>
+                        <div id="select">
+                            <img src="img/select.png" class="img-responsive center-block">
+                        </div>
+                        <div id="select">
+                            <img src="img/select.png" class="img-responsive center-block">
+                        </div>
+                        <div id="select">
+                            <img src="img/select.png" class="img-responsive center-block">
+                        </div>
+                        <div id="select">
+                            <img src="img/select.png" class="img-responsive center-block">
+                        </div>
+                        <div id="select">
+                            <img src="img/select.png" class="img-responsive center-block">
+                        </div>
+                        <div id="select">
+                            <img src="img/select.png" class="img-responsive center-block">
+                        </div>
+                        <div id="select">
+                            <img src="img/select.png" class="img-responsive center-block">
+                        </div>
+                        <div id="select">
+                            <img src="img/select.png" class="img-responsive center-block">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="map-area" class="col-md-11">
+                <div id="map"></div>
+            </div>
         </div>
-        <div id="map-area" class="col-md-11">
-          <div id="map"></div>
-        </div>
-      </div>
     </div>
-	<!----------------- Circle menu items ----------------->
-	<ul id="nav">
-	<li><a id="poi" href="javascript:m.map.on('click', setPOI); $.fn.ferroMenu.toggleMenu('#nav');"><i class="icon-map-marker"></i></a></li>
-	<li><a href="javascript:alert('Works!');"><i class="icon-camera"></i></a></li>
-	</ul>
-	
-    <!--------------------- Javascript -------------------->	
+    <!----------------- Circle menu items ----------------->
+    <ul id="nav">
+        <li><a id="poi" href="javascript:m.map.on('click', setPOI); $.fn.ferroMenu.toggleMenu('#nav');"><i class="icon-map-marker"></i></a>
+        </li>
+        <li><a href="javascript:alert('Works!');"><i class="icon-camera"></i></a>
+        </li>
+    </ul>
+
+    <!--------------------- Javascript -------------------->
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-	<script src="js/jquery-1.11.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/l.control.geosearch.js"></script>
-	<script src="js/l.geosearch.provider.openstreetmap.js"></script>
-	<script src="js/jquery.ferro.ferroMenu-1.2.3.min.js"></script>
-	<script src="js/jquery.slimscroll.min.js"></script>
-	<script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
-	<script src="http://js.leapmotion.com/leap-plugins-0.1.9.min.js"></script>
-	<script src="//js.leapmotion.com/leap.rigged-hand-0.1.5.min.js"></script>
-	<script src="js/leap-controller.js"></script>
-	<script src="js/poi.js"></script>
-	<script src="js/speech.js"></script>
-	<script src="js/map.js"></script> 
-	
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/l.control.geosearch.js"></script>
+    <script src="js/l.geosearch.provider.openstreetmap.js"></script>
+    <script src="js/jquery.ferro.ferroMenu-1.2.3.min.js"></script>
+    <script src="js/jquery.slimscroll.min.js"></script>
+    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+    <script src="http://js.leapmotion.com/leap-plugins-0.1.9.min.js"></script>
+    <script src="//js.leapmotion.com/leap.rigged-hand-0.1.5.min.js"></script>
+    <script src="js/leap-controller.js"></script>
+    <script src="js/poi.js"></script>
+    <script src="js/speech.js"></script>
+    <script src="js/map.js"></script>
+
 </body>
 
 </html>
