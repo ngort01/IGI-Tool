@@ -19,6 +19,7 @@ recognition.onresult = function(event) {
 
     console.log("interim: " + interim_transcript);
     console.log("final: " + final_transcript);
+	document.getElementById("command").innerHTML =(interim_transcript);
 
     // update the web page
     if (final_transcript.length > 0) {
