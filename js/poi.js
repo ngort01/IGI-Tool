@@ -82,6 +82,20 @@ function setPOI(e) {
 	pois.addLayer(POI);
 	m.map.off('click', setPOI); // turn off map event
 	$('#POImodal').modal('toggle') // open poi creation form
-	$("#lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
-	$("#lon").val(POI.getLatLng().lng);
+	$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
+	$("#poi_lon").val(POI.getLatLng().lng);
+}
+
+
+/**
+Submit POI information
+**/
+
+function submit_POI() {
+	var name = $("#poi_name").val();
+	var lat = parseFloat($("#poi_lat").val());
+	var lon = parseFloat($("#poi_lon").val());
+	var descr = $("#poi_description").val();
+	addPoi(name, descr, lat, lon);
+	$('#POImodal').modal('toggle');
 }

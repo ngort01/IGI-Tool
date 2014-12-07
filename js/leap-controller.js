@@ -101,8 +101,8 @@ Gestures and corresponding map events
 				} else if (frame.hands[0].pinchStrength == 0 && settingPOI == true) {
 					settingPOI = false;
 					$('#POImodal').modal('toggle') // open poi creation form
-					$("#lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
-					$("#lon").val(POI.getLatLng().lng);
+					$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
+					$("#poi_lon").val(POI.getLatLng().lng);
 				}
 			}
         });
