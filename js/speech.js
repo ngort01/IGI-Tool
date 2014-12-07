@@ -91,7 +91,9 @@ recognition.onresult = function(event) {
     }
     if (((final_transcript.indexOf("left") >= 0) 
 		|| (final_transcript.indexOf("net") >= 0) 
-		|| (final_transcript.indexOf("next") >= 0)) && (mapControling)) {
+		|| (final_transcript.indexOf("next") >= 0)
+		|| (final_transcript.indexOf("live") >= 0)
+		|| (final_transcript.indexOf("lift") >= 0))		&& (mapControling)) {
         centerPoint = m.map.getCenter();
         var delta = (m.map.getBounds().getEast() - m.map.getBounds().getWest()) / 4;
         centerPoint.lng -= Math.abs(delta);
@@ -99,11 +101,14 @@ recognition.onresult = function(event) {
         console.log("Panned Left by " + Math.abs(delta));
 		document.getElementById("final_command").innerHTML =("panned left");
         final_transcript = '';
+		document.getElementById("final_interim").innerHTML =("left");
     }
 
     if (((final_transcript.indexOf("right") >= 0) 
 		|| (final_transcript.indexOf("white") >= 0) 
-		|| (final_transcript.indexOf("fight") >= 0)) && (mapControling)) {
+		|| (final_transcript.indexOf("fight") >= 0)
+		|| (final_transcript.indexOf("Riot") >= 0)
+		|| (final_transcript.indexOf("Ryian") >= 0))		&& (mapControling)) {
         centerPoint = m.map.getCenter();
         var delta = (m.map.getBounds().getEast() - m.map.getBounds().getWest()) / 4;
         centerPoint.lng += Math.abs(delta);
@@ -111,6 +116,7 @@ recognition.onresult = function(event) {
         console.log("Panned right by " + Math.abs(delta));
 		document.getElementById("final_command").innerHTML =("panned right");
         final_transcript = '';
+		document.getElementById("final_interim").innerHTML =("right");
     }
 
     if (((final_transcript.indexOf("up") >= 0) 
@@ -124,6 +130,7 @@ recognition.onresult = function(event) {
         console.log("Panned up by " + Math.abs(delta));
 		document.getElementById("final_command").innerHTML =("panned up");
         final_transcript = '';
+		document.getElementById("final_interim").innerHTML =("up");
     }
 
     if (((final_transcript.indexOf("down") >= 0)
@@ -135,6 +142,7 @@ recognition.onresult = function(event) {
         console.log("Panned down by " + Math.abs(delta));		
 		document.getElementById("final_command").innerHTML =("panned down");
         final_transcript = '';
+		document.getElementById("final_interim").innerHTML =("down");
     }
 }
 
