@@ -51,6 +51,22 @@ recognition.onresult = function(event) {
 		console.log("Dictation completed.");
 		final_transcript = '';
 		description='';
+		document.getElementById("final_command").innerHTML =("POI submitted");
+        document.getElementById("final_transcript").innerHTML =("submit");
+	}
+	
+	if ((recDescription) && ((final_transcript.indexOf("close")>=0)
+					|| (final_transcript.indexOf("clothes")>=0)
+					|| (final_transcript.indexOf("jaws")>=0))) {
+		$("#poi_form_close").click();
+		turnOnMapControlsPerSpeech();
+		console.log("formular closed.");
+		recDescription=false;
+		$("#poi_description").val('');
+		$("#poi_name").val('');
+		description = '';
+		document.getElementById("final_command").innerHTML =("POI closed");
+        document.getElementById("final_transcript").innerHTML =("close");
 	}
 	
 	if ((recDescription) && ((final_transcript.length)>0)) {
@@ -60,12 +76,27 @@ recognition.onresult = function(event) {
 		final_transcript = '';
 	}
 	
+	if ((recName) && ((final_transcript.indexOf("close")>=0)
+					|| (final_transcript.indexOf("clothes")>=0)
+					|| (final_transcript.indexOf("jaws")>=0))) {
+		$("#poi_form_close").click();
+		turnOnMapControlsPerSpeech();
+		console.log("formular closed.");
+		recName=false;
+		$("#poi_description").val('');
+		$("#poi_name").val('');
+		description = '';
+		document.getElementById("final_command").innerHTML =("POI closed");
+        document.getElementById("final_transcript").innerHTML =("close");
+	}
+	
 	if ((recName) && ((final_transcript.length)>0)) {
 		$("#poi_name").val(final_transcript);
 		recName = false;
 		recDescription = true;
 		console.log("\"Name\"-Field filled.");
 		final_transcript = '';
+		$('#poi_description').focus();
 	}
 	
 
@@ -160,6 +191,9 @@ function turnOffMapControlsPerSpeech(){
 }
 
 function startFormRecording(){
+	$('#POImodal').on('shown.bs.modal', function () {
+		$('#poi_name').focus();
+	})
 	recName = true;
 	recDescription = false;
 	turnOffMapControlsPerSpeech();
