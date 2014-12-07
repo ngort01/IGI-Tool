@@ -93,7 +93,9 @@
         <!-- /.container -->
     </nav>
 	
-	<div id="command" style="font-size: 20px; text-align: center;">
+	<div id="final_interim" style="font-size: 20px; text-align: center;">
+	</div>
+	<div id="final_command" style="font-size: 20px; text-align: center;">
 	</div>
 
 
@@ -143,7 +145,7 @@
     </div>
     <!----------------- Circle menu items ----------------->
     <ul id="nav">
-        <li><a id="poi" href="javascript:m.map.on('click', setPOI); $.fn.ferroMenu.toggleMenu('#nav');"><i class="icon-map-marker"></i></a>
+        <li><a id="poi" href="javascript:m.map.on('click', setPOI);startFormRecording(event); $.fn.ferroMenu.toggleMenu('#nav');"><i class="icon-map-marker"></i></a>
         </li>
         <li><a href="javascript:alert('Works!');"><i class="icon-camera"></i></a>
         </li>

@@ -46,11 +46,27 @@ body {
 }
 
 
-#command{
+#final_interim{
 position:absolute; 
-bottom:6%; 
+bottom:8%; 
+right:40%;
+width:20%;
+height:5%;
+box-shadow: 0 8px 19px -8px #222;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  border-radius: 6px; 
+
+}
+
+
+#final_command{
+position:absolute; 
+bottom:8%; 
 right:1%;
-width:8%;
+width:20%;
 height:5%;
 box-shadow: 0 8px 19px -8px #222;
   -moz-box-sizing: border-box;
