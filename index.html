@@ -47,11 +47,12 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="poi_form_close" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="poi_form_submit"class="btn btn-primary" onclick="javascript: submit_POI();">Submit</button>
+                    <button type="button" id="poi_form_close" class="btn btn-default" data-dismiss="modal" onclick="javascript: stopFormRecording();">Close</button>
+                    <button type="button" id="poi_form_submit"class="btn btn-primary" onclick="javascript: submit_POI(); stopFormRecording();">Submit</button>
                 </div>
             </div>
         </div>
+    </div
     </div>
     <hr />
 	

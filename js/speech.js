@@ -5,6 +5,7 @@ var language = 'en-GB'; // TODO: fetch language as option value from drop down b
 var mapControling = true;
 var recName = false;
 var recDescription = false;
+var description = '';
 
 recognition.continuous = true; // keep processing input until stopped
 recognition.interimResults = true; // show interim results
@@ -44,27 +45,24 @@ recognition.onresult = function(event) {
 	
 	if ((recDescription) && (final_transcript.indexOf("submit")>=0)){
 		recDescription = false;
-		// TO DO: safe and close the POI form
-		// POI.safe(); form.close();
-		
+		$("#poi_form_submit").click();
+		submit_POI();
 		turnOnMapControlsPerSpeech();
 		console.log("Dictation completed.");
 		final_transcript = '';
+		description='';
 	}
 	
 	if ((recDescription) && ((final_transcript.length)>0)) {
-		// TO DO: add the final_transcript into the "Descirption"-field in POI form
-		// form.addDescription(final_transcript + ". ");
+		description = description + final_transcript + ". ";
+		$("#poi_description").val(description);
 		console.log("\"Description\"-Field augmented.");
 		final_transcript = '';
 	}
 	
 	if ((recName) && ((final_transcript.length)>0)) {
-		// TO DO: put the final_transcript into the "Name"-field in POI form
-		// form.setName(final_transcript);
+		$("#poi_name").val(final_transcript);
 		recName = false;
-		// TO DO: Focus "Description"-Field in POI-Form
-		// form.FocusDescription();
 		recDescription = true;
 		console.log("\"Name\"-Field filled.");
 		final_transcript = '';
@@ -163,6 +161,7 @@ function turnOffMapControlsPerSpeech(){
 
 function startFormRecording(){
 	recName = true;
+	recDescription = false;
 	turnOffMapControlsPerSpeech();
 	console.log("\"Name\"-Field focused.");
 	final_transcript = '';
@@ -170,7 +169,7 @@ function startFormRecording(){
 
 function stopFormRecording(){
 	recName = false;
-	recDescirption = false;
+	recDescription = false;
 	turnOnMapControlsPerSpeech();
 	final_transcript = '';
 }
