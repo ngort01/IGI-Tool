@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+		<style type='text/css'>
+			h2 {
+				font-family: arial, sans-serif;
+				font-weight: bold;
+				font-size: large;
+			}
+			h3 {
+				font-family: arial, sans-serif;
+				font-weight: bold;
+				font-size: medium;
+			}
+			table {
+				width: 67%;
+				font-family: arial, sans-serif;
+			}
+			thead {
+				font-weight: bold;
+				background-color: #CCCCCC;
+			}
+			tbody {
+				background-color: #EEEEEE;
+			}
+			td {
+				padding: 3px;
+			}
+			a.del {
+				font-weight: bold;
+				text-decoration: none;
+			}
+			a.poi {
+				font-weight: bold;
+				text-decoration: none;
+			}
+		</style>
+
+	</head>
+	<body>
+
+	<!-- CONTENT -->
+
+		<h2>List of all tags:</h2>
+		<table>
+			<thead><tr><td>Names</td></tr></thead>
+			<tbody><tr><td id="tag-list"/></tr></tbody>
+		</table>
+
+		<h3>Add a new tag:</h3>
+        <input id="new-tag-name" type="text" size="16" placeholder="Name"/>
+        <button id="submit-btn-tag">Submit</button>
+		<div id="submit-tag-result"></div>
+
+		<h3>Search for tag name or ID:</h3>
+		<input id="search-tag-name" type="text" size="16" placeholder="Name"/>
+		<input id="search-tag-oid" type="text" size="16" placeholder="ID"/>
+        <button id="search-btn-tag">Search</button>
+		<div id="search-tag-result"></div>
+
+		<!-- SCRIPTS -->
+		<script type="text/javascript">
+
+			var base_url = "localhost";
+			var base_url = "http://GIV-INTERACTION.uni-muenster.de";
+
+			var getTag_url		= base_url + "/db/getTag.php";
+			var insertTag_url	= base_url + "/db/insertTag.php";
+
+			var tag_cache;
+
+
+			// //////////////////////////////////////////////////
+			// TAGS
+
+			// get all tags
+			function getTags() {
+				jQuery.ajax( { url:  getTag_url,
+						dataType : "json",
+						async : true,
+						type: "GET",
+						success: function(data, status, jqXHR) {
+
+							tag_cache = data;
+							showTags();
+						}
+					}
+				);
+			}
+
+			// show all cached tags
+			function showTags() {
+
+				if (tag_cache instanceof Array && tag_cache.length > 0) {
+
+					var tag_list = tag_cache[0].name;
+
+					for (var i = 1; i < tag_cache.length; i++) {
+						tag_list += ", " + tag_cache[i].name;
+					}
+
+					jQuery("#tag-list").html(tag_list);
+				}
+			}
+
+			// get single tag
+			function getTag(name, oid) {
+				jQuery.ajax( { url:  getTag_url + "?name=" + name + "&oid=" + oid,
+						dataType : "json",
+						async : true,
+						type: "GET",
+						success: function(data, status, jqXHR) {
+
+							console.log("getTag: successful");
+							console.log("name: " + name);
+							console.log("oid: " + oid);
+
+							var result = "Result:"
+
+							for (var tag of data) {
+								result += " (" + tag.name + ", " + tag._id.$id + ")";
+							}
+							jQuery("#search-tag-result").text("");
+							jQuery("#search-tag-result").text(result);
+						},
+						error: function (xhr, status, err) {
+
+							console.log("getTag: error");
+							jQuery("#search-tag-result").text("");
+						}
+					}
+				);
+			}
+
+			// adds a new tag to the database and returns it's id
+			function addTag(name) {
+
+				jQuery.ajax( { url:  insertTag_url + "?name=" + name,
+					type: "POST",
+					async: true,
+					contentType: "application/json;charset=utf-8",
+					success: function (data) {
+
+						console.log(data);
+
+						jQuery("#submit-tag-result").html(data);
+						getTags();
+					},
+					error: function (xhr, status, err) {
+
+						alert("Tag '" + name + "' couldn't be added to database.") ;
+					}					
+				});
+			}
+
+			// //////////////////////////////////////////////////
+			// OTHERS
+
+			jQuery("#submit-btn-tag").click(function() {
+
+					addTag(
+						jQuery("#new-tag-name").val());
+				}
+			);
+			jQuery("#search-btn-tag").click(function() {
+
+					getTag(
+						jQuery("#search-tag-name").val(),
+						jQuery("#search-tag-oid").val()
+					);
+				}
+			);
+
+
+			// get items initially
+			getTags();
+
+		</script>
+	</body>
+</html>
