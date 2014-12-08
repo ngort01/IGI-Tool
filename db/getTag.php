@@ -7,7 +7,7 @@
 
 	/*
 	 * Standard single-node URI format:
-	 * mongodb://[username:password@]host:port/[database]
+	 * mongodb://[username:password@]host:port/[database] 
 	 */
 	$uri = "mongodb://localhost:27017/igi-tool-db";
 	$options = array("connectTimeoutMS" => 30000);
