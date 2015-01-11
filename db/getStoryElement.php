@@ -1,4 +1,4 @@
-<?php
+<?php 
 	/*
 	 * return story elements by ID, story ID, POI ID, tag ID or tag name
 	 * if none of these is given, all story elements will be returned

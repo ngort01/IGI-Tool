@@ -1,4 +1,4 @@
-<?php
+<?php 
 	/*
 	 * create a new story element (with a name) and return it's ID
 	 * if there already is a story element by this name, this one's ID is returned

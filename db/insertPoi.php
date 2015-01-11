@@ -1,4 +1,4 @@
-<?php
+<?php 
 	/*
 	 * create new POI (with name and location) and return it's ID
 	 * if there already is a POI with this exact name and location,

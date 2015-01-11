@@ -1,4 +1,4 @@
-<?php
+<?php 
 	/*
 	 * returns a POI by ID or by bounding box, encoded in JSON
 	 * if no ID or bounding box is given, all POI will be returned

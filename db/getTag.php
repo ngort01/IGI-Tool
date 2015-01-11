@@ -1,4 +1,4 @@
-<?php
+<?php 
 	/*
 	 * return tags by ID or by name, encoded as JSON
 	 * if no name or ID is given, all tags will be returned

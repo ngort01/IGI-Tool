@@ -1,4 +1,4 @@
-<?php
+<?php 
 	/*
 	 * create a new tag (with a name) and return it's ID
 	 * if there already is a tag by this name, this one's ID is returned

@@ -1,4 +1,4 @@
-<?php
+<?php 
 	/*
 	 * return stories by ID, by tag name or by tag ID
 	 * if none of these is given, all stories will be returned
