@@ -1,7 +1,7 @@
 <?php
 	/*
-	 * return tags by ID or by name, encoded as JSON
-	 * if no name or ID is given, all tags will be returned
+	 * return stories by ID, by tag name or by tag ID
+	 * if none of these is given, all stories will be returned
 	 */
 
 	/*
@@ -20,61 +20,68 @@
 	$db = $client->selectDB("igi-tool-db");
 
 	// get tag collection
-	$collection = $db->tags;
+	$collection = $db->stories;
 
 	// get request parameters
-	$name = $_REQUEST['name'];
 	$oid = $_REQUEST['oid'];
+	$tag_oid = $_REQUEST['tag_oid'];
+	$tag_name = $_REQUEST['tag_name'];
 
 
-	if ($name && $oid) {
-		// get tags by name and ID
+	if ($oid) {
+		// get story by ID
 
-		$cursor = $collection -> find( array('name' => $name, '_id' => new MongoId($oid)) );
-		$count = $cursor -> count();
-
-		if ($count > 0) {
-
-			$array = array();
-			foreach ($cursor as $tag) {
-
-				$array[] = $tag;
-			}
-			echo json_encode($array);
-		}
-	} elseif ($name) {
-		// get tags by name
-
-		$cursor = $collection -> find( array('name' => $name) );
-		$count = $cursor -> count();
-
-		if ($count > 0) {
-
-			$array = array();
-			foreach ($cursor as $tag) {
-
-				$array[] = $tag;
-			}
-			echo json_encode($array);
-		}
-	} elseif ($oid) {
-		// get tags by ID
-
-		// check whether a tag with this ID already exists
 		$cursor = $collection -> find( array('_id' => new MongoId($oid)) );
 		$count = $cursor -> count();
 
 		if ($count > 0) {
 
 			$array = array();
-			foreach ($cursor as $tag) {
+			foreach ($cursor as $story) {
 
-				$array[] = $tag;
+				$array[] = $story;
+			}
+			echo json_encode($array);
+		}
+	} elseif ($tag_oid) {
+		// get stories by tag ID
+
+		// TODO change request to 'tags' CONTAINS new MongoId($tag_oid)
+		$cursor = $collection -> find( array('tag_id' => new MongoId($tag_oid)) );
+		$count = $cursor -> count();
+
+		if ($count > 0) {
+
+			$array = array();
+			foreach ($cursor as $story) {
+
+				$array[] = $story;
+			}
+			echo json_encode($array);
+		}
+	} elseif ($tag_name) {
+		// get stories by tag name
+
+		// get tag oid
+		$tag = json_decode(file_get_contents('getTag.php?name='.$tag_name));
+		$tag_oid = $tag['_id'];
+
+		// TODO $tag_oid should be CONTAINED in 'tags'. Does this work?
+		// find( array('tags' => array('$in' => new MongoId($tag_oid))) );
+		$cursor = $collection -> find( array('tag_id' => new MongoId($tag_oid)) );
+		$count = $cursor -> count();
+
+		if ($count > 0) {
+
+			$array = array();
+			foreach ($cursor as $story) {
+
+				$array[] = $story;
 			}
 			echo json_encode($array);
 		}
 	} else {
-		// get all tags
+		// get all stories
 	
 		$cursor = $collection -> find();
 		$count = $cursor -> count();
@@ -82,9 +89,9 @@
 		if ($count > 0) {
 
 			$array = array();
-			foreach ($cursor as $tag) {
+			foreach ($cursor as $story) {
 
-				$array[] = $tag;
+				$array[] = $story;
 			}
 			echo json_encode($array);
 		}

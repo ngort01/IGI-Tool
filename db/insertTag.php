@@ -1,8 +1,7 @@
 <?php
 	/*
-	 * modified simple example, copied from:
-	 * https://github.com/mongolab/mongodb-driver-examples/blob/master/php/php_simple_example.php
-	 *
+	 * create a new tag (with a name) and return it's ID
+	 * if there already is a tag by this name, this one's ID is returned
 	 */
 
 	/*
@@ -39,6 +38,8 @@
 			echo $tag['_id'];
 		}
 	} else {
+	// TODO only create a tag if a name is given
+
 		// create a new document
 		$document = array('name' => $name);
 		$collection -> insert($document);

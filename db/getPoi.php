@@ -1,7 +1,7 @@
 <?php
 	/*
-	 * return tags by ID or by name, encoded as JSON
-	 * if no name or ID is given, all tags will be returned
+	 * returns a POI by ID or by bounding box, encoded in JSON
+	 * if no ID or bounding box is given, all POI will be returned
 	 */
 
 	/*
@@ -20,61 +20,59 @@
 	$db = $client->selectDB("igi-tool-db");
 
 	// get tag collection
-	$collection = $db->tags;
+	$collection = $db->pois;
 
 	// get request parameters
-	$name = $_REQUEST['name'];
 	$oid = $_REQUEST['oid'];
+	$bbox = $_REQUEST['bbox'];
 
+	if ($oid) {
+		// get poi by ID
 
-	if ($name && $oid) {
-		// get tags by name and ID
-
-		$cursor = $collection -> find( array('name' => $name, '_id' => new MongoId($oid)) );
-		$count = $cursor -> count();
-
-		if ($count > 0) {
-
-			$array = array();
-			foreach ($cursor as $tag) {
-
-				$array[] = $tag;
-			}
-			echo json_encode($array);
-		}
-	} elseif ($name) {
-		// get tags by name
-
-		$cursor = $collection -> find( array('name' => $name) );
-		$count = $cursor -> count();
-
-		if ($count > 0) {
-
-			$array = array();
-			foreach ($cursor as $tag) {
-
-				$array[] = $tag;
-			}
-			echo json_encode($array);
-		}
-	} elseif ($oid) {
-		// get tags by ID
-
-		// check whether a tag with this ID already exists
 		$cursor = $collection -> find( array('_id' => new MongoId($oid)) );
 		$count = $cursor -> count();
 
 		if ($count > 0) {
 
 			$array = array();
-			foreach ($cursor as $tag) {
+			foreach ($cursor as $poi) {
 
-				$array[] = $tag;
+				$array[] = $poi;
+			}
+			echo json_encode($array);
+		}
+	} elseif ($bbox) {
+		// get poi by bounding box
+
+		// TODO mongoDB provide the possibility to filter the database for geo objects
+		// instead of compareing coordinates, e.g. a rectangle as a bounding box
+		$bbox_array = split(',', $bbox);
+
+		// TODO check comparisons in this query
+		$cursor = $collection -> find( array(
+				'name' => $name,
+				'location' => array(
+					'type' => 'Point',
+					'coordinates' => array(
+						0 => array('$gte' => (float) $bbox_array[0], '$lte' => (float) $bbox_array[1]),
+						1 => array('$gte' => (float) $bbox_array[2], '$lte' => (float) $bbox_array[3])
+						)
+					)
+				)
+			);
+		$count = $cursor -> count();
+
+		if ($count > 0) {
+
+			$array = array();
+			foreach ($cursor as $poi) {
+
+				$array[] = $poi;
 			}
 			echo json_encode($array);
 		}
 	} else {
-		// get all tags
+		// get all POI
 	
 		$cursor = $collection -> find();
 		$count = $cursor -> count();
@@ -82,9 +80,9 @@
 		if ($count > 0) {
 
 			$array = array();
-			foreach ($cursor as $tag) {
+			foreach ($cursor as $poi) {
 
-				$array[] = $tag;
+				$array[] = $poi;
 			}
 			echo json_encode($array);
 		}
