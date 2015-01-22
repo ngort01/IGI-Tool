@@ -12,9 +12,8 @@
 
 
 body {
-    background-color: #848484;
-    padding-bottom: 200px;
-	background-image: url("../img/bg.jpg");
+    /*background-color: #848484;*/
+	/*background-image: url("../img/bg.jpg");*/
 }
 	
 .jumbotron {
@@ -40,34 +39,27 @@ body {
 	border-radius: 6px;
 }
 
-#select, #zoom, #pan {
+#select, #zoom, #pan, #close,  #lm, #open_menu{
 	border: 1px solid #E5E5E5;
 	border-radius: 6px;
 }
 
+/* of the following two,one is likely to be deleted */
 
-#final_interim{
+#load{
 position:absolute; 
-bottom:8%; 
-right:40%;
-width:20%;
-height:5%;
-box-shadow: 0 8px 19px -8px #222;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  border: 1px solid #000;
-  border-radius: 6px; 
-
+bottom:50%; 
+right:50%;
 }
 
 
 #final_command{
 position:absolute; 
-bottom:8%; 
+background-color:#959697;
+bottom:60px; 
 right:1%;
-width:20%;
-height:5%;
+width:15%;
+height:3%;
 box-shadow: 0 8px 19px -8px #222;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -76,3 +68,10 @@ box-shadow: 0 8px 19px -8px #222;
   border-radius: 6px; 
 
 }
+
+#skeleton{
+position:absolute; 
+bottom:50px; 
+right:64%;
+width:1%; 
+  }

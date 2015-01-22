@@ -12,16 +12,19 @@
     <link rel="stylesheet" href="css/jquery.ferro.ferroMenu.css" />
     <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-tour.min.css">
 
 </head>
 
 <body style="overflow: hidden">
-
-    <!-- Modals -->
+<!------------------------------------------------------------------------------------------->
+<!---------------------------------------- Modals ------------------------------------------->
+<!-------------------------------------------------------------------------------------------->
+	<!-- POI modal -->
     <div class="modal fade" id="POImodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header tour-step-nine">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                     </button>
                     <h4 class="modal-title" id="exampleModalLabel">Enter POI Information</h4>
@@ -30,7 +33,7 @@
                     <form role="form">
                         <div class="form-group">
                             <label for="poi_name" class="control-label">Name:</label>
-                            <input type="text" class="form-control" id="poi_name">
+                            <input data-toggle="tooltip" title="Say/Enter a Name!" type="text" class="form-control" id="poi_name">
                         </div>
 						<div class="form-group">
                             <label for="poi_lat" class="control-label">Lat:</label>
@@ -42,22 +45,156 @@
                         </div>
                         <div class="form-group">
                             <label for="poi_description" class="control-label">Description:</label>
-                            <textarea class="form-control" id="poi_description"></textarea>
+                            <textarea data-toggle="tooltip" title="Dictate/Enter a Description!" class="form-control" id="poi_description"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="poi_form_close" class="btn btn-default" data-dismiss="modal" onclick="javascript: stopFormRecording();">Close</button>
+                    <button type="button" id="poi_form_close" class="btn btn-default" data-dismiss="modal" 
+							onclick="javascript: 	stopFormRecording(); 
+													paused = false;">Close</button>
                     <button type="button" id="poi_form_submit"class="btn btn-primary" onclick="javascript: submit_POI(); stopFormRecording();">Submit</button>
                 </div>
             </div>
         </div>
     </div
     </div>
+	
+	<!-- Story modal -->
+    <div class="modal fade" id="story_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Enter Story Information</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="story_name" class="control-label">Name:</label>
+                            <input data-toggle="tooltip" title="Say/Enter a Name!" type="text" class="form-control" id="story_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="story_description" class="control-label">Description:</label>
+                            <textarea data-toggle="tooltip" title="Dictate/Enter a Description!" class="form-control" id="story_description"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="story_form_close" class="btn btn-default" data-dismiss="modal" 
+							onclick="javascript: 	stopFormRecording(); 
+													paused = false; 
+													creating_story = false;">Close</button>
+                    <button type="button" id="story_form_submit"class="btn btn-primary" 
+							onclick="javascript: 	stopFormRecording(); 
+													$('#story_modal').modal('toggle');
+													$('#select').tooltip('show');">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<!-- Story submit modal -->
+    <div class="modal fade" id="story_submit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Enter Story Information</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="story_submit_name" class="control-label">Name:</label>
+                            <input data-toggle="tooltip" title="Say/Enter a Name!" type="text" class="form-control" id="story_submit_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="story_submit_description" class="control-label">Description:</label>
+                            <textarea data-toggle="tooltip" title="Dictate/Enter a Description!" class="form-control" id="story_submit_description"></textarea>
+                        </div>
+                    </form>
+					<!-- Story Element Overview -->
+					<h3 class="text-center">Story Elements</h3>
+					<table class="table table-striped table-responsive" id="elem_table">
+						<thead id="tblHead">
+							<tr>
+							<th> </th>
+							<th>Name</th>
+							</tr>
+						</thead>
+						<tbody id= "tbody">
+
+						</tbody>
+					</table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="story_form_close" class="btn btn-default" data-dismiss="modal" 
+							onclick="javascript: 	stopFormRecording(); 
+													cancel_story();">Close</button>
+                    <button type="button" id="story_form_submit"class="btn btn-primary" 
+							onclick="javascript: 	stopFormRecording(); 
+													submit_story();">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<!-- Story element modal -->
+    <div class="modal fade" id="story_elem_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Enter Story Information</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="story_elem_name" class="control-label">Name:</label>
+                            <input data-toggle="tooltip" title="Say/Enter a Name!" type="text" class="form-control" id="story_elem_name">
+                        </div>
+						<div class="form-group">
+                            <label for="poi_id" class="control-label">POI_ID:</label>
+                            <input type="text" class="form-control" id="poi_id" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="story_elem_abstract" class="control-label">Abstract:</label>
+                            <textarea data-toggle="tooltip" title="Dictate/Enter an Abstract!" class="form-control" id="story_elem_abstract"></textarea>
+                        </div>
+						 <div class="form-group">
+                            <label for="story_elem_text" class="control-label">Text:</label>
+                            <textarea data-toggle="tooltip" title="Dictate/Enter a Text!" class="form-control" id="story_elem_text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="story_elem_form_close" class="btn btn-default" data-dismiss="modal" 
+							onclick="javascript: 	stopFormRecording(); 
+													cancel_story();">Cancel</button>
+					<button type="button" id="story_elem_form_prev"class="btn btn-default" 
+							onclick="javascript: 	stopFormRecording(); 
+													paused = false;
+													storyline.spliceLatLngs(storyline.getLatLngs().length-1, 1);
+													$('#story_elem_modal').modal('toggle');">Previous</button>
+                    <button type="button" id="story_elem_form_next"class="btn btn-default" 
+							onclick="javascript: 	stopFormRecording(); 
+													submit_story_elem();">Next</button>
+					<button type="button" id="story_elem_form_submit"class="btn btn-primary" 
+							onclick="javascript: 	stopFormRecording(); 
+													submit_story_elem(story_submit_modal);">Create Story</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <hr />
 	
-    <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+	<!-------------------------------------------------------------------------------------------->
+    <!---------------------------------------- Navigation ---------------------------------------->
+	<!-------------------------------------------------------------------------------------------->
+    <nav class=" navbar navbar-inverse navbar-fixed-bottom" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -66,27 +203,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-
                 </button>
-
-
-                <a class="navbar-brand" href="#">Projectname</a>
-                <hr>
-
+            <a class="navbar-brand" href="#">Projectname</a>
+            <hr>
             </div>
-
+			
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
+					<li>
+                        <a href="javascript:tour.restart();">Start Tutorial</a>
                     </li>
                     <li>
                         <a href="javascript:speechButton(event);">Start Speech Recognition</a>
-                    </li>
+                    </li>			 
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -94,17 +224,21 @@
         <!-- /.container -->
     </nav>
 	
-	<div id="final_interim" style="font-size: 20px; text-align: center;">
-	</div>
+
 	<div id="final_command" style="font-size: 20px; text-align: center;">
 	</div>
+	
+	<div id="skeleton" class="tour-step-three">
+	</div>
+	
 
-
-    <!-------------------- Grid layout ----------------->
+	<!-------------------------------------------------------------------------------------------->
+    <!----------------------------------- Gesture icons layout ----------------------------------->
+	<!-------------------------------------------------------------------------------------------->
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-1">
-                <div id="gestures" class="panel panel-default">
+                <div id="gestures" class="tour-step-two panel panel-default">
                     <div class="panel-body">
                         <div id="pan">
                             <img src="img/pan.png" class="img-responsive center-block">
@@ -112,47 +246,38 @@
                         <div id="zoom">
                             <img src="img/zoom.png" class="img-responsive center-block">
                         </div>
-                        <div id="select">
+                        <div id="select" data-toggle="tooltip" title="Choose or create a POI and select it to attach a story element">
                             <img src="img/select.png" class="img-responsive center-block">
                         </div>
-                        <div id="select">
-                            <img src="img/select.png" class="img-responsive center-block">
+                        <div id="close" data-toggle="tooltip" title="Swipe from right to left to close the window.">
+                            <img src="img/swipe.png" class="img-responsive center-block">
                         </div>
-                        <div id="select">
-                            <img src="img/select.png" class="img-responsive center-block">
-                        </div>
-                        <div id="select">
-                            <img src="img/select.png" class="img-responsive center-block">
-                        </div>
-                        <div id="select">
-                            <img src="img/select.png" class="img-responsive center-block">
-                        </div>
-                        <div id="select">
-                            <img src="img/select.png" class="img-responsive center-block">
-                        </div>
-                        <div id="select">
-                            <img src="img/select.png" class="img-responsive center-block">
-                        </div>
-                        <div id="select">
-                            <img src="img/select.png" class="img-responsive center-block">
+                        <div id="lm" data-toggle="tooltip" title="Pinch and hold to drag a Marker. Release to place it on the map.">
+                            <img src="img/pinch.png" class="img-responsive center-block">
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="map-area" class="col-md-11">
+            <div id="map-area" class="tour-step-five col-md-11">
                 <div id="map"></div>
+				<div id="load"><img src="img/loader.gif"/></div>
             </div>
         </div>
     </div>
-    <!----------------- Circle menu items ----------------->
-    <ul id="nav">
-        <li><a id="poi" href="javascript:m.map.on('click', setPOI);startFormRecording(event); $.fn.ferroMenu.toggleMenu('#nav');"><i class="icon-map-marker"></i></a>
-        </li>
-        <li><a href="javascript:alert('Works!');"><i class="icon-camera"></i></a>
-        </li>
+	
+	<!-------------------------------------------------------------------------------------------->
+    <!------------------------------------ Circle menu items ------------------------------------->
+	<!-------------------------------------------------------------------------------------------->
+    <ul id="nav" class="tour-step-eight">
+        <li><a id="poi" data-toggle="tooltip" title="Create POI" 
+				href="javascript:m.map.on('click', setPOI);startFormRecording(event); $.fn.ferroMenu.toggleMenu('#nav');"><i class="icon-map-marker"></i></a></li>
+        <li><a id="story" data-toggle="tooltip" title="Create Story" 
+				href="javascript:create_story(); $.fn.ferroMenu.toggleMenu('#nav'); paused = true;"><i class="icon-book"></i></a></li>
     </ul>
 
-    <!--------------------- Javascript -------------------->
+	<!-------------------------------------------------------------------------------------------->
+    <!--------------------------------------- Javascript ----------------------------------------->
+	<!-------------------------------------------------------------------------------------------->
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -164,10 +289,13 @@
     <script src="http://js.leapmotion.com/leap-plugins-0.1.9.min.js"></script>
     <script src="//js.leapmotion.com/leap.rigged-hand-0.1.5.min.js"></script>
     <script src="js/leap-controller.js"></script>
-    <script src="js/poi.js"></script>
     <script src="js/speech.js"></script>
-    <script src="js/map.js"></script>
-
+    <script src="js/map.js"></script>	
+	<script src="js/poi.js"></script>
+	<script src="js/story.js"></script>	
+	<script src="js/story_elems.js"></script>
+	<script src="js/bootstrap-tour.min.js"></script>
+	<script src="js/tour.js"></script>
 </body>
 
 </html>

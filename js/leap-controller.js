@@ -53,8 +53,8 @@ Gestures and corresponding map events
                 return; // Skip this update
             }
 
-            //Check for a hand
-            if (frame.hands != null && frame.hands.length > 0) {
+            /////////////////////// GESTURES WITH ONE HAND ////////////////////////////////////////
+            if (frame.hands != null && frame.hands.length == 1) {
                 //Check for gestures - zoom in / out
                 if (frame.gestures != null && frame.gestures.length > 0) {
                     for (var x = 0; x < frame.gestures.length; x++) {
@@ -62,8 +62,9 @@ Gestures and corresponding map events
                         if (gesture.type == "circle") {
                             zoom(frame, gesture);
 						//Check for gestures - open/close marker
-                        } else if (gesture.type == "screenTap" && frame.pointable(gesture.pointableIds[0]).type == INDEX_FINGER) {
-						
+                        } else if (gesture.type == "screenTap" && frame.pointable(gesture.pointableIds[0]).type == INDEX_FINGER
+									&& gesture.duration > 100000) {
+							console.log("DONE!");
 							pois.eachLayer(function (layer) {
 								if (handMarker.getBounds().contains(layer.getLatLng())) {
 								 layer.fireEvent("click");
@@ -86,12 +87,18 @@ Gestures and corresponding map events
 									$('#gestures').slimScroll({ scrollBy: '-20px' });
 								}
 							}
-						}
+						} 
                     }
-                }				
-            }
-			} else {
+                } ///////////////////////////// GESTURES WITH TWO HANDS	////////////////////////////////////////
+			} else if (frame.hands != null && frame.hands.length == 2) {
+				toggleMenu(frame);
+				}
+			} else { // if paused
+				if (frame.hands != null && frame.hands.length == 2) {
+					toggleMenu(frame);
+				}
 				controlMenu(frame);
+				closeModal(frame);
 			} 
 			
 			// place POI by pinching
@@ -99,10 +106,12 @@ Gestures and corresponding map events
 				if (frame.hands[0].pinchStrength > 0.9 && settingPOI == true) {
 					POI.setLatLng(newCenter);
 				} else if (frame.hands[0].pinchStrength == 0 && settingPOI == true) {
+					$('#lm').tooltip('toggle');
 					settingPOI = false;
 					$('#POImodal').modal('toggle') // open poi creation form
 					$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
 					$("#poi_lon").val(POI.getLatLng().lng);
+					paused = true;
 				}
 			}
         });
@@ -246,12 +255,33 @@ Gestures and corresponding map events
 	curMenuItem = 0;							// currently selected menu item
 	var POI = null;
 	var settingPOI = false;						// toggle POI setting modus
+	menumode = false;							// check if menumode is active
+	
+	/**
+	toggle menu by gesture
+	**/
+	function toggleMenu(frame) {
+		if (frame.gestures != null && frame.gestures.length > 0) {
+			for (var x = 0; x < frame.gestures.length; x++) {
+				var gesture = frame.gestures[x];
+				if (gesture.type == "swipe" && gesture.duration > 150000) { // duration maybe has to be adjusted
+					var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+					if (isHorizontal) {
+						$.fn.ferroMenu.toggleMenu("#nav");
+						//console.log("works")
+					}
+				}
+			}
+		}
+	} 
+	
 
+	var poi_tooltip = false; // check if poi tooltip is shown
 	/**
 	menu control with gestures
 	**/
 	function controlMenu(frame) {
-		if (frame.hands.length > 0 && frame.hands[0].type == "right") {
+		if (frame.hands.length > 0 && frame.hands[0].type == "right" && menumode == true) {
 			var roll = frame.hands[0].roll()* 180/Math.PI; // hand rotation around leap z axis in degrees
 			if (roll > 0 && roll < 90) {
 				curMenuItem = 0; 
@@ -266,16 +296,67 @@ Gestures and corresponding map events
 		
 			$(menuItems[prevMenuItem]).css({"opacity": "1", "box-shadow":"none"});
 			$(menuItems[curMenuItem]).css({"opacity": "0.8", "box-shadow": "0px 0px 5px 3px #FFFFFF inset"}); // highlight currently selected menu item
+
+			
+			if (menuItems[curMenuItem].id == "poi" && poi_tooltip == false) {
+				poi_tooltip = true;
+				$('#lm').tooltip('show');
+			} else if (menuItems[curMenuItem].id != "poi" && poi_tooltip == true) {
+				poi_tooltip = false;
+				$('#lm').tooltip('hide');
+			}
 			
 			// if POI creation is selected by pinching
-			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.9) {
+			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.8) {
 				//console.log(frame.hands[0].pinchStrength);
 				$.fn.ferroMenu.toggleMenu("#nav"); // close menu -> map interaction is enabled
 				POI = L.marker(newCenter);
 				pois.addLayer(POI);
 				settingPOI = true;
+			} else if (menuItems[curMenuItem].id == "story" && frame.hands[0].pinchStrength > 0.9) {
+				console.log(frame.hands[0]);
+				$.fn.ferroMenu.toggleMenu("#nav");
+				create_story();
 			}
 			prevMenuItem = curMenuItem;
+		}
+	}
+	
+	/**
+	closes modal on swipe
+	**/
+	function closeModal(frame) {
+		if (frame.hands.length > 0 && frame.hands[0].type == "right") {
+			if (frame.gestures != null && frame.gestures.length > 0) {
+				for (var x = 0; x < frame.gestures.length; x++) {
+					var gesture = frame.gestures[x];
+					if (gesture.type == "swipe" && gesture.duration > 150000) {
+						var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+						if (isHorizontal && gesture.direction[0] < 0) { //swipe left
+						console.log(gesture.type);
+							if ($('#POImodal').hasClass('in')) {
+								$('#POImodal').modal('hide');
+								paused = false; // enable map controls
+							}
+							if ($('#story_modal').hasClass('in')) {
+								$('#story_modal').modal('hide');
+								paused = false; // enable map controls
+								cancel_story();
+							}
+							if ($('#story_submit_modal').hasClass('in')) {
+								$('#story_submit_modal').modal('hide');
+								paused = false; // enable map controls
+								cancel_story();
+							}
+							if ($('#story_elem_modal').hasClass('in')) {
+								$('#story_elem_modal').modal('hide');
+								paused = false; // enable map controls
+								cancel_story();
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	

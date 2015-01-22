@@ -3,6 +3,7 @@
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<!-- <script type="text/javascript" src="js/jquery-2.1.1.js"></script> -->
 		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 
 		<style type='text/css'>
@@ -127,7 +128,7 @@
 			var tag_cache;
 
 			// //////////////////////////////////////////////////
-			// stories 
+			// stories
 			
 			// get stories
 			function getStories() {
@@ -423,6 +424,8 @@
 							timeout: 300000,
 							contentType: "application/json;charset=utf-8",
 							success: function (data) {
+
+								console.log(data);
 
 								if (typeof data == "undefined") {
 
