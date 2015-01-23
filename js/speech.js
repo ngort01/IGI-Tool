@@ -71,7 +71,6 @@ var webSpeech = function() {
                         final_transcript = '';
                         $('#load').hide(); // hide loader element
                     } else if ((final_transcript.indexOf("up") >= 0) || (final_transcript.indexOf("apple") >= 0) || (final_transcript.indexOf("app") >= 0)) {
-
                         centerPoint = m.map.getCenter();
                         var delta = (m.map.getBounds().getNorth() - m.map.getBounds().getSouth()) / 4;
                         centerPoint.lat += delta;
@@ -89,7 +88,18 @@ var webSpeech = function() {
                         document.getElementById("final_command").innerHTML = ("panned down");
                         final_transcript = '';
                         $('#load').hide(); // hide loader element
-                    }
+					//////////////////////////////////////////////////////////
+					/////////////////////// Multimodal////////////////////////
+					//////////////////////////////////////////////////////////
+                    } else if ((final_transcript.indexOf("create marker") >= 0)) {
+						POI = L.marker(newCenter);
+						pois.addLayer(POI);
+						$('#POImodal').modal('toggle') // open poi creation form
+						startFormRecording();
+						$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
+						$("#poi_lon").val(POI.getLatLng().lng);
+						paused = true;
+					}
                 }
 
                 //////////////////////////////////////////////////////////
@@ -156,7 +166,6 @@ var webSpeech = function() {
                         $('#load').hide(); // hide loader element
                     }
                 }
-
                 // void command ended
                 voiceEnd(event);
             } else {

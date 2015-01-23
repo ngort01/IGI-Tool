@@ -1,3 +1,4 @@
+var newCenter; // leaflet coordinates of the stabilizedPalmPosition
 /**
 Gestures and corresponding map events
 **/
@@ -20,7 +21,7 @@ Gestures and corresponding map events
     var X = 0,
         Y = 1,
         Z = 2;
-	var newCenter; // leaflet coordinates of the stabilizedPalmPosition
+	
 
     function LeapController(map) {
         self = this;
@@ -337,6 +338,7 @@ Gestures and corresponding map events
 							if ($('#POImodal').hasClass('in')) {
 								$('#POImodal').modal('hide');
 								paused = false; // enable map controls
+								stopFormRecording();
 							}
 							if ($('#story_modal').hasClass('in')) {
 								$('#story_modal').modal('hide');
