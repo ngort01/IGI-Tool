@@ -162,6 +162,7 @@ $(document).ready(function() {
         $('#close').tooltip('show');
     })
 	
+
 	// hide loader on page load
 	$('#load').hide();
     init();

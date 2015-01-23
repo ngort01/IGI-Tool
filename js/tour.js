@@ -1,4 +1,6 @@
-    var tour = new Tour({
+    var tutorial =  false;
+	
+	var tour = new Tour({
 	name: "Tutorial",
 	steps: [
       {
