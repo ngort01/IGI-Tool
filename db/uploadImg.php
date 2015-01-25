@@ -59,27 +59,32 @@
 		if ($id) {
 		    echo "The file ". $name . " has been uploaded with ID " . $id . "<br>";
 
-			// show image
-			echo 'Here it is...';
-			$img = $grid -> findOne( array("_id" => $id) );
-		    header("Content-Type: image/jpg");
-
-			echo $img -> getBytes();
-
-//		    $stream = $img -> getResource();
-//		    while (!feof($stream)) {
-//		            echo fread($stream, 51200);
-//		    }
-			echo '...is it?';
-
 			// add image to poi
 			$collection = $db -> pois;
+
+			$poi = collection -> findOne( array('_id' => new MongoId($poi_oid)) );
 			$img_doc = array('name' => $name, 'data' => new MongoId($id));
 
-			$collection -> update( array('_id' => new MongoId($poi_oid),
-						array( '$set' => array('picture' => $img_doc) )
-					)
-				);
+			if (is_array($poi['picture']) || is_null($poi['picture'])) {
+
+				// add new picture to array
+				// TODO can "array('_id' => new MongoId($poi_oid)" be replaced by $poi?
+				$collection -> update( array('_id' => new MongoId($poi_oid),
+							array( '$push' => array('picture' => $img_doc) )
+						)
+					);
+			} else {
+
+				// create an array from the existing picture and the new one
+				$collection -> update( array('_id' => new MongoId($poi_oid),
+							array('$set' => array('picture' => array( 
+								$poi['picture'],	// old, existing picture
+								$img_doc ))			// picture to add
+							)
+						)
+					);
+			}
+
 		} else {
 		    echo "Sorry, there was an error uploading your file.<br>";
 		}

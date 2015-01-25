@@ -45,7 +45,7 @@
 
 	<!-- CONTENT -->
 
-		<h2>Upload images:</h2>
+		<h2>Upload and show images:</h2>
 		
 		<h3>Add a new image file to a point of interest:</h3>
 		<form id="new-img-form" action="/dbml/uploadImg.php" method="post" enctype="multipart/form-data">
@@ -91,13 +91,13 @@
 
 				for (var item of data) {
 
-					var poi = "<option value='" + item._id.$oid + "'>" + item.name + "</option>"
+					var poi = "<option value='" + item._id.$id + "'>" + item.name + "</option>"
 
 					jQuery("#new-img-poi").append(poi);
 				}
 			}
 			
-
+			
 			// //////////////////////////////////////////////////
 			// OTHERS
 

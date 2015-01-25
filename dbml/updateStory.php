@@ -34,6 +34,7 @@
 		echo 'add element to array<br>';
 
 		// add element to array
+		// TODO can "array('_id' => new MongoId($story_oid))" be replaced by $story ?
 		$collection -> update( array('_id' => new MongoId($story_oid)),
 				array('$push' => array( 'story_element_id' => new MongoId($story_element_oid)) )
 			);
