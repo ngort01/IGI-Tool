@@ -1,4 +1,5 @@
 var newCenter; // leaflet coordinates of the stabilizedPalmPosition
+var initialTip = false;
 /**
 Gestures and corresponding map events
 **/
@@ -45,6 +46,15 @@ Gestures and corresponding map events
 		
         Leap.loop(controllerOptions, function(frame) {
 			if (!paused) { // map interactions paused if menu is opened
+			
+			if (frame.hands.length == 0 && !initialTip) {
+				$('#zoom').tooltip('show');	
+				initialTip = true;
+			} else if (frame.hands.length > 0 && initialTip){
+				$('#zoom').tooltip('hide');	
+				initialTip = false;			
+			}
+			
             // handmarkers
             markHands(frame)
 
@@ -64,7 +74,7 @@ Gestures and corresponding map events
                             zoom(frame, gesture);
 						//Check for gestures - open/close marker
                         } else if (gesture.type == "screenTap" && frame.pointable(gesture.pointableIds[0]).type == INDEX_FINGER
-									&& gesture.duration > 100000) {
+									&& gesture.duration > 90000) {
 							pois.eachLayer(function (layer) {
 								if (handMarker.getBounds().contains(layer.getLatLng())) {
 								 layer.fireEvent("click");
@@ -257,6 +267,8 @@ Gestures and corresponding map events
 	var POI = null;
 	var settingPOI = false;						// toggle POI setting modus
 	menumode = false;							// check if menumode is active
+	menuopen = false;
+	menuclosed = true;
 	
 	/**
 	toggle menu by gesture
@@ -265,11 +277,21 @@ Gestures and corresponding map events
 		if (frame.gestures != null && frame.gestures.length > 0) {
 			for (var x = 0; x < frame.gestures.length; x++) {
 				var gesture = frame.gestures[x];
-				if (gesture.type == "swipe" && gesture.duration > 150000) { // duration maybe has to be adjusted
+				if (gesture.type == "swipe" && gesture.duration > 110000 && menuclosed) { // duration maybe has to be adjusted
 					var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
-					if (isHorizontal) {
+					if (isHorizontal && gesture.direction[0] < 0) { //swipe left
 						$.fn.ferroMenu.toggleMenu("#nav");
-						//console.log("works")
+						menuclosed = false;
+						menuopen = true;
+						console.log("works")
+					}
+				} else if (gesture.type == "swipe" && gesture.duration > 110000 && menuopen) {
+					var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+					if (isHorizontal && gesture.direction[0] > 0) { //swipe right
+						$.fn.ferroMenu.toggleMenu("#nav");
+						menuclosed = true;
+						menuopen = false;
+						console.log("works")
 					}
 				}
 			}
@@ -308,7 +330,7 @@ Gestures and corresponding map events
 			}
 			
 			// if POI creation is selected by pinching
-			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.8) {				
+			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.9) {				
 				$.fn.ferroMenu.toggleMenu("#nav"); // close menu -> map interaction is enabled
 				POI = L.marker(self.map.getCenter());
 				pois.addLayer(POI);

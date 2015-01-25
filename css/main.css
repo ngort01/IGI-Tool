@@ -54,7 +54,9 @@ right:50%;
 
 #voice_help{
 position:absolute; 
-background-color:#959697;
+color:white;
+background-color:black;
+opacity:0.9;
 bottom:60px; 
 right:17%;
 width:15%;
@@ -69,7 +71,9 @@ box-shadow: 0 8px 19px -8px #222;
 
 #final_command{
 position:absolute; 
-background-color:#959697;
+color:white;
+background-color:black;
+opacity:0.9;
 bottom:60px; 
 right:1%;
 width:15%;

@@ -93,7 +93,7 @@ var webSpeech = function() {
                         $('#load').hide(); // hide loader element
 					} else if ((final_transcript.indexOf("help me") >= 0)) {
 						$('#voice_help').popover('show');
-					} else if ((final_transcript.indexOf("close help") >= 0)) {
+					} else if ((final_transcript.indexOf("thank you") >= 0)) {
 						$('#voice_help').popover('hide');
 					//////////////////////////////////////////////////////////
 					/////////////////////// Multimodal////////////////////////

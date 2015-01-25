@@ -130,6 +130,14 @@ $(document).ready(function() {
 		container: 'body'
     });
 	
+	// gesture tooltips
+	$('#zoom').tooltip({
+        placement: "right",
+		trigger: "manual",
+		container: 'body',
+		html: "true"
+    });
+	
 	// remove POI when poi modal is closed
 	$('#POImodal').on('hide.bs.modal', function(e) {
         remove_poi();
@@ -191,6 +199,6 @@ $(document).ready(function() {
 	$('#load').hide();
 	$("#voice_help").hide();
 	//$('#voice_help').popover('show');
-	
+	//$('#zoom').tooltip('show');	
     init();
 });
