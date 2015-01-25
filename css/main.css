@@ -52,6 +52,20 @@ bottom:50%;
 right:50%;
 }
 
+#voice_help{
+position:absolute; 
+background-color:#959697;
+bottom:60px; 
+right:17%;
+width:15%;
+height:3%;
+box-shadow: 0 8px 19px -8px #222;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  border-radius: 6px; 
+}
 
 #final_command{
 position:absolute; 
@@ -75,3 +89,21 @@ bottom:50px;
 right:64%;
 width:1%; 
   }
+  
+.popover {
+	background-color: black !important;
+	opacity:0.9 !important;
+}
+  
+.popover-title {
+    color: white;
+	background-color: black !important;
+}
+.popover-content {
+    color: white;
+	background: black;
+}
+
+.tooltip-inner {
+	opacity:0.9;
+}

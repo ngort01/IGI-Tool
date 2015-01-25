@@ -65,7 +65,6 @@ Gestures and corresponding map events
 						//Check for gestures - open/close marker
                         } else if (gesture.type == "screenTap" && frame.pointable(gesture.pointableIds[0]).type == INDEX_FINGER
 									&& gesture.duration > 100000) {
-							console.log("DONE!");
 							pois.eachLayer(function (layer) {
 								if (handMarker.getBounds().contains(layer.getLatLng())) {
 								 layer.fireEvent("click");
@@ -170,6 +169,7 @@ Gestures and corresponding map events
                 //handMarker.addTo(self.map)
             }
             handMarker.addTo(self.map)
+			//handMarker = null;
         }
     }
 
@@ -281,7 +281,7 @@ Gestures and corresponding map events
 	/**
 	menu control with gestures
 	**/
-	function controlMenu(frame) {
+	function controlMenu(frame, map) {
 		if (frame.hands.length > 0 && frame.hands[0].type == "right" && menumode == true) {
 			var roll = frame.hands[0].roll()* 180/Math.PI; // hand rotation around leap z axis in degrees
 			if (roll > 0 && roll < 90) {
@@ -308,10 +308,9 @@ Gestures and corresponding map events
 			}
 			
 			// if POI creation is selected by pinching
-			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.8) {
-				//console.log(frame.hands[0].pinchStrength);
+			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.8) {				
 				$.fn.ferroMenu.toggleMenu("#nav"); // close menu -> map interaction is enabled
-				POI = L.marker(newCenter);
+				POI = L.marker(self.map.getCenter());
 				pois.addLayer(POI);
 				settingPOI = true;
 			} else if (menuItems[curMenuItem].id == "story" && frame.hands[0].pinchStrength > 0.9) {
@@ -334,7 +333,7 @@ Gestures and corresponding map events
 					if (gesture.type == "swipe" && gesture.duration > 150000) {
 						var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
 						if (isHorizontal && gesture.direction[0] < 0) { //swipe left
-						console.log(gesture.type);
+						//console.log(gesture.type);
 							if ($('#POImodal').hasClass('in')) {
 								$('#POImodal').modal('hide');
 								paused = false; // enable map controls

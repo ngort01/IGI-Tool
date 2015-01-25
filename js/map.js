@@ -61,6 +61,10 @@ function init() {
 Load elements on document ready
 **/
 $(document).ready(function() {
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////Menu stuff////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////
+	
     $("#nav").ferroMenu({
         position: "center-bottom", // initial position of the menu in one of the 9 anchor points
         open: 100,
@@ -93,6 +97,11 @@ $(document).ready(function() {
     });
 
     $("#gestures").height($(window).height() - 140); //gesture panel height
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////// Tooltips ////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////
 
     // show tooltip when input field is focused
     $('input, textarea').tooltip({
@@ -106,17 +115,20 @@ $(document).ready(function() {
 		trigger: "manual"
     });
 	
+	// voice help tooltips
+	$('#voice_help').popover({
+        placement: "top",
+		trigger: "manual",
+		html: "true",
+		container: 'body'
+    });
+	
 	// gesture tooltips
 	$('#select, #lm, #close').tooltip({
         placement: "right",
 		trigger: "manual",
 		container: 'body'
     });
-
-    // clear input fields in modal when its closed
-    $('#POImodal, #story_elem_modal').on('hidden.bs.modal', function(e) {
-        $('#poi_name, #poi_description, #story_elem_name, #story_elem_abstract, #story_elem_text').val("");
-    })
 	
 	// remove POI when poi modal is closed
 	$('#POImodal').on('hide.bs.modal', function(e) {
@@ -162,8 +174,23 @@ $(document).ready(function() {
         $('#close').tooltip('show');
     })
 	
-
-	// hide loader on page load
+	
+	////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////// clear input fields in modal when its closed /////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////
+    $('#POImodal, #story_elem_modal').on('hidden.bs.modal', function(e) {
+        $('#poi_name, #poi_description, #story_elem_name, #story_elem_abstract, #story_elem_text').val("");
+    })
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////// Other stuff ////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// hide elems on page load
 	$('#load').hide();
+	$("#voice_help").hide();
+	//$('#voice_help').popover('show');
+	
     init();
 });

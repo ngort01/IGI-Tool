@@ -7,9 +7,12 @@ var final_transcript = "";
 
 var webSpeech = function() {
     var recognition = new webkitSpeechRecognition();
+	recognition.onstart = function(event) {$("#voice_help").show();}
+	recognition.onend = function(event) {$("#voice_help").hide();}
 
     function voiceStart(event) {
         $('#load').show();
+		document.getElementById("final_command").style.color="black";
     }
 
 
@@ -88,17 +91,37 @@ var webSpeech = function() {
                         document.getElementById("final_command").innerHTML = ("panned down");
                         final_transcript = '';
                         $('#load').hide(); // hide loader element
+					} else if ((final_transcript.indexOf("help me") >= 0)) {
+						$('#voice_help').popover('show');
+					} else if ((final_transcript.indexOf("close help") >= 0)) {
+						$('#voice_help').popover('hide');
 					//////////////////////////////////////////////////////////
 					/////////////////////// Multimodal////////////////////////
 					//////////////////////////////////////////////////////////
                     } else if ((final_transcript.indexOf("create marker") >= 0)) {
-						POI = L.marker(newCenter);
-						pois.addLayer(POI);
-						$('#POImodal').modal('toggle') // open poi creation form
-						startFormRecording();
-						$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
-						$("#poi_lon").val(POI.getLatLng().lng);
-						paused = true;
+						if (newCenter) {
+							POI = L.marker(newCenter);
+							pois.addLayer(POI);
+							$('#POImodal').modal('toggle') // open poi creation form
+							startFormRecording();
+							$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
+							$("#poi_lon").val(POI.getLatLng().lng);
+							paused = true;
+						} else {
+							document.getElementById("final_command").innerHTML = ("Hand position not found!");
+							document.getElementById("final_command").style.color="red";
+						}
+					} else if ((final_transcript.indexOf("click") >= 0) || (final_transcript.indexOf("pig") >= 0)) {
+						if (handMarker) {
+							pois.eachLayer(function (layer) {
+								if (handMarker.getBounds().contains(layer.getLatLng())) {
+									layer.fireEvent("click");
+								}
+							});
+						} else {
+							document.getElementById("final_command").innerHTML = ("Hand position not found!");
+							document.getElementById("final_command").style.color="red";
+						}
 					}
                 }
 
@@ -183,9 +206,6 @@ var webSpeech = function() {
         });
     }
 
-
-
-
     return {
         listen: function() {
             recognition.continuous = true;
@@ -198,7 +218,7 @@ var webSpeech = function() {
 }();
 
 
-webSpeech.listen();
+//webSpeech.listen();
 
 function speechButton(event) {
     final_transcript = '';
