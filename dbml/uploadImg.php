@@ -49,7 +49,7 @@
 		$options = array("connectTimeoutMS" => 30000);
 
 		$client = new MongoClient($uri, $options);
-		$db = $client -> selectDB('igi-tool-db');
+		$db = $client->selectDB("igi-tool-db");
 
 		// upload image
 		$grid = $db -> getGridFS();

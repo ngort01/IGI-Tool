@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+		<style type='text/css'>
+			h2 {
+				font-family: arial, sans-serif;
+				font-weight: bold;
+				font-size: large;
+			}
+			h3 {
+				font-family: arial, sans-serif;
+				font-weight: bold;
+				font-size: medium;
+			}
+			table {
+				width: 67%;
+				font-family: arial, sans-serif;
+			}
+			thead {
+				font-weight: bold;
+				background-color: #CCCCCC;
+			}
+			tbody {
+				background-color: #EEEEEE;
+			}
+			td {
+				padding: 3px;
+			}
+			a.del {
+				font-weight: bold;
+				text-decoration: none;
+			}
+			a.poi {
+				font-weight: bold;
+				text-decoration: none;
+			}
+		</style>
+
+	</head>
+	<body>
+
+	<!-- CONTENT -->
+
+		<h2>Get images:</h2>
+		
+		<h3>Get an image file by it's ID:</h3>
+	    <input id="img-oid" type="text" size="16" placeholder="Select POI..."/>
+	    <button id="get-btn-img">Get it</button>
+		<div id="img-result"></div>
+
+		<!-- SCRIPTS -->
+		<script type="text/javascript">
+
+			// var base_url = "localhost";
+			var base_url = "http://GIV-INTERACTION.uni-muenster.de";
+
+			var getImage_url	= base_url + "/dbml/getImage.php";
+			
+					
+			// //////////////////////////////////////////////////
+			// OTHERS
+
+			// add selected POI ID to the form's action url
+			jQuery("#get-btn-img").click(function() {
+				jQuery("#img-result").html(
+				
+						'<img src="' + getImage_url + '?oid=' + jQuery("#img-oid").val() + '"/>'
+					);
+				}
+			);
+
+		</script>
+	</body>
+</html>
