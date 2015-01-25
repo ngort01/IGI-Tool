@@ -281,7 +281,7 @@ Gestures and corresponding map events
 	/**
 	menu control with gestures
 	**/
-	function controlMenu(frame, map) {
+	function controlMenu(frame) {
 		if (frame.hands.length > 0 && frame.hands[0].type == "right" && menumode == true) {
 			var roll = frame.hands[0].roll()* 180/Math.PI; // hand rotation around leap z axis in degrees
 			if (roll > 0 && roll < 90) {
