@@ -94,6 +94,10 @@ right:64%;
 width:1%; 
   }
   
+a:hover {
+ cursor:pointer;
+}
+  
 .popover {
 	background-color: black !important;
 	opacity:0.9 !important;
@@ -111,3 +115,4 @@ width:1%;
 .tooltip-inner {
 	opacity:0.9;
 }
+

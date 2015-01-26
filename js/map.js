@@ -6,6 +6,14 @@
         // Muenster coords
         var lon = 7.6286;
         var lat = 51.9629;
+		
+		//GeoLoc marker 
+		var blueIcon = L.icon({
+		iconUrl: 'img/pos.png',
+
+		iconSize:     [70, 90], // size of the icon
+		iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+		});
 
         // map definition
         self.map = L.map("map", {
@@ -28,11 +36,23 @@
         new L.Control.GeoSearch({
             provider: new L.GeoSearch.Provider.OpenStreetMap(),
             showMarker: false
-        }).addTo(self.map);
+        }).addTo(self.map);	
+		
+					//get my Location//
+		$('.GetMe').on('click', function(){
+		self.map.locate({setView: true, maxZoom: 17});
+		});
+
+
+		self.map.on('locationfound', onLocationFound);
+		function onLocationFound(e) {
+		L.marker((e.latlng),{icon: blueIcon}).addTo(self.map);
+		}
 
     }
 
     window.Map = Map;
+	
 
 }(window));
 
