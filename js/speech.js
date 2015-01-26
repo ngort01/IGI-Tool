@@ -95,6 +95,9 @@ var webSpeech = function() {
 						$('#voice_help').popover('show');
 					} else if ((final_transcript.indexOf("thank you") >= 0)) {
 						$('#voice_help').popover('hide');
+					} else if ((final_transcript.indexOf("start tutorial") >= 0)) {
+						tour.restart(); 
+						tutorial = true;
 					//////////////////////////////////////////////////////////
 					/////////////////////// Multimodal////////////////////////
 					//////////////////////////////////////////////////////////
@@ -107,7 +110,7 @@ var webSpeech = function() {
 							$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
 							$("#poi_lon").val(POI.getLatLng().lng);
 							paused = true;
-						} else {
+						} else { // error handling
 							document.getElementById("final_command").innerHTML = ("Hand position not found!");
 							document.getElementById("final_command").style.color="red";
 						}
@@ -118,7 +121,7 @@ var webSpeech = function() {
 									layer.fireEvent("click");
 								}
 							});
-						} else {
+						} else { // error handling
 							document.getElementById("final_command").innerHTML = ("Hand position not found!");
 							document.getElementById("final_command").style.color="red";
 						}
