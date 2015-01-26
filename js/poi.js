@@ -39,7 +39,10 @@ function createPois(obj, map) {
         var p = L.marker([lat, lon], {
             title: obj._id.$oid
         });
-        p.bindPopup("<p><b>"+ obj.name+"<hr></b></p>" + obj.description);
+        p.bindPopup("<p><b>"+ obj.name+"<hr></b></p>"
+        		+ createPoiImageList(obj)
+        		+ "<hr>"
+        		+ obj.description);
         p.on('click', function(e) {
             if (creating_story == true) { // if in story creation mode
                 p.togglePopup(); // prevent popup from showing
@@ -50,6 +53,33 @@ function createPois(obj, map) {
         });
         pois.addLayer(p);
     }
+}
+
+/**
+show images to one poi
+**/
+function createPoiImageList(poi) {
+	
+	var img_list = "";
+	
+	if (typeof poi.picture != "undefined") {
+		var getImage_url = "http://GIV-INTERACTION.uni-muenster.de/dbml/getImage.php";
+		
+		if (poi.picture instanceof Array) {
+		
+			for (var pic of poi.picture) {
+				
+				img_list += '<img src="' + getImage_url + '?oid=' + pic.data.$oid
+					+ '" alt="' + pic.name + '" width="50" height="50"/>';
+			}
+		} else {
+			
+			var pic = poi.picture;
+			img_list += '<img src="' + getImage_url + '?oid=' + pic.data.$oid
+			+ '" alt="' + pic.name + '" width="50" height="50"/>';
+		}
+	}
+	return img_list;
 }
 
 /**

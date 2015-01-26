@@ -50,7 +50,10 @@
 		<h3>Add a new image file to a point of interest:</h3>
 		<form id="new-img-form" action="/db/uploadImg.php" method="post" enctype="multipart/form-data">
 		    <input id="new-img-name" type="text" size="16" placeholder="Name"/>
-		    <select id="new-img-poi" type="text" size="1" placeholder="Select POI..."/>
+		    <br>
+		    <select id="new-img-poi" type="text" size="1"/>
+		    Add to POI<input id="new-img-poi-add" type="checkbox"/>
+		    <br>
 		    <input id="new-img-filename" type="file" name="new-img-filename"size="16"/>
 			<input type="submit" value="upload" name="submit"/>
 		    <!-- button id="submit-btn-img">Submit</button -->
@@ -103,7 +106,13 @@
 
 			// add selected POI ID to the form's action url
 			jQuery("#new-img-form").click(function() {
-				jQuery("#new-img-form").attr("action", "/db/uploadImg.php?poi_oid=" + jQuery("#new-img-poi").val() + "&display_name=" + jQuery("#new-img-name").val());
+				
+					if (jQuery("#new-img-poi-add").is(":checked")) {
+						var add = "true";
+					} else {
+						var add = "false";
+					} 
+					jQuery("#new-img-form").attr("action", "/db/uploadImg.php?poi_oid=" + jQuery("#new-img-poi").val() + "&add_to_poi=" + add + "&display_name=" + jQuery("#new-img-name").val());
 				}
 			);
 

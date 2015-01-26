@@ -5,6 +5,7 @@
 	$uploadOk = 1;
 	$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 	$poi_oid = $_REQUEST['poi_oid'];
+	$display_name = $_REQUEST['display_name'];
 
 	// Check if image file is a actual image or fake image
 	if(isset($_POST["submit"])) {
@@ -63,7 +64,7 @@
 			$collection = $db -> pois;
 
 			$poi = collection -> findOne( array('_id' => new MongoId($poi_oid)) );
-			$img_doc = array('name' => $name, 'data' => new MongoId($id));
+			$img_doc = array('name' => $display_name, 'data' => new MongoId($id));
 
 			if (is_array($poi['picture']) || is_null($poi['picture'])) {
 

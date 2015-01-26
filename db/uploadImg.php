@@ -4,6 +4,10 @@
 	$target_file = $target_dir . basename($_FILES["new-img-filename"]["name"]);
 	$uploadOk = 1;
 	$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+	$poi_oid = $_REQUEST['poi_oid'];
+	$add_to_poi = $_REQUEST['add_to_poi'];
+	$display_name = $_REQUEST['display_name'];
+	
 
 	// Check if image file is a actual image or fake image
 	if(isset($_POST["submit"])) {
@@ -42,8 +46,6 @@
 
 	// if everything is ok, try to upload file
 	} else {
-		
-		// $success = move_uploaded_file($_FILES["new-img-filename"]["tmp_name"], $target_file);
 
 		$uri = "mongodb://localhost:27017/igi-tool-db";
 		$options = array("connectTimeoutMS" => 30000);
@@ -59,30 +61,32 @@
 		if ($id) {
 		    echo "The file ". $name . " has been uploaded with ID " . $id . "<br>";
 
-			// add image to poi
-			$collection = $db -> pois;
+			if ($add_to_poi === 'true') {
+				// add image to poi
+				$collection = $db -> pois;
 
-			$poi = collection -> findOne( array('_id' => new MongoId($poi_oid)) );
-			$img_doc = array('name' => $name, 'data' => new MongoId($id));
+				$poi = collection -> findOne( array('_id' => new MongoId($poi_oid)) );
+				$img_doc = array('name' => $name, 'data' => new MongoId($id));
 
-			if (is_array($poi['picture']) || is_null($poi['picture'])) {
+				if (is_array($poi['picture']) || is_null($poi['picture'])) {
 
-				// add new picture to array
-				// TODO can "array('_id' => new MongoId($poi_oid)" be replaced by $poi?
-				$collection -> update( array('_id' => new MongoId($poi_oid),
-							array( '$push' => array('picture' => $img_doc) )
-						)
-					);
-			} else {
-
-				// create an array from the existing picture and the new one
-				$collection -> update( array('_id' => new MongoId($poi_oid),
-							array('$set' => array('picture' => array( 
-								$poi['picture'],	// old, existing picture
-								$img_doc ))			// picture to add
+					// add new picture to array
+					// TODO can "array('_id' => new MongoId($poi_oid)" be replaced by $poi?
+					$collection -> update( array('_id' => new MongoId($poi_oid),
+								array( '$push' => array('picture' => $img_doc) )
 							)
-						)
-					);
+						);
+				} else {
+
+					// create an array from the existing picture and the new one
+					$collection -> update( array('_id' => new MongoId($poi_oid),
+								array('$set' => array('picture' => array( 
+									$poi['picture'],	// old, existing picture
+									$img_doc ))			// picture to add
+								)
+							)
+						);
+				}
 			}
 
 		} else {
