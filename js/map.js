@@ -38,17 +38,18 @@
             showMarker: false
         }).addTo(self.map);	
 		
-					//get my Location//
+		//get my Location//
 		$('.GetMe').on('click', function(){
-		self.map.locate({setView: true, maxZoom: 17});
+			self.map.locate();
 		});
-
 
 		self.map.on('locationfound', onLocationFound);
 		function onLocationFound(e) {
-		L.marker((e.latlng),{icon: blueIcon}).addTo(self.map);
+			L.marker((e.latlng),{icon: blueIcon}).addTo(self.map);
+			self.map.panTo(e.latlng);
+			self.map.stopLocate();
+			
 		}
-
     }
 
     window.Map = Map;

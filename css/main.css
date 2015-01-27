@@ -92,11 +92,11 @@ position:absolute;
 bottom:50px; 
 right:64%;
 width:1%; 
-  }
-  
+}
+ 
 a:hover {
  cursor:pointer;
-}
+} 
   
 .popover {
 	background-color: black !important;
