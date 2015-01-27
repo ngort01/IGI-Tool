@@ -90,7 +90,8 @@
                     <button type="button" id="story_form_submit"class="btn btn-primary" 
 							onclick="javascript: 	stopFormRecording(); 
 													$('#story_modal').modal('toggle');
-													$('#select').tooltip('show');">Next</button>
+													$('#select').tooltip('show');
+													storyElemMod = true;" >Next</button>
                 </div>
             </div>
         </div>
@@ -185,7 +186,8 @@
 													submit_story_elem();">Next</button>
 					<button type="button" id="story_elem_form_submit"class="btn btn-primary" 
 							onclick="javascript: 	stopFormRecording(); 
-													submit_story_elem(story_submit_modal);">Create Story</button>
+													submit_story_elem(story_submit_modal);
+													storySubMod = true;">Create Story</button>
                 </div>
             </div>
         </div>
@@ -301,7 +303,7 @@
         <li><a id="poi" data-toggle="tooltip" title="Create POI" 
 				href="javascript:m.map.on('click', setPOI);startFormRecording(event); $.fn.ferroMenu.toggleMenu('#nav');"><i class="icon-map-marker"></i></a></li>
         <li><a id="story" data-toggle="tooltip" title="Create Story" 
-				href="javascript:create_story(); $.fn.ferroMenu.toggleMenu('#nav'); paused = true;"><i class="icon-book"></i></a></li>
+				href="javascript:create_story(); $.fn.ferroMenu.toggleMenu('#nav'); storyMod = true;"><i class="icon-book"></i></a></li>
     </ul>
 
 	<!-------------------------------------------------------------------------------------------->

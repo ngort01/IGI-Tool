@@ -4,6 +4,9 @@ var recName = false;
 var recDescription = false;
 var description = '';
 var final_transcript = "";
+var storyMod = false;
+var storyElemMod = false;
+var storySubMod = false;
 
 var webSpeech = function() {
     var recognition = new webkitSpeechRecognition();
@@ -164,7 +167,94 @@ var webSpeech = function() {
                     $('#poi_description').focus();
                     $('#load').hide(); // hide loader element
                 }
-
+				
+				//////////////////////////////////////////////////////////
+                /////Navigation storymodal////////////////////////////////
+                //////////////////////////////////////////////////////////
+				if(storyMod) { // check for story modal
+					if ((final_transcript.indexOf("close") >= 0) || (final_transcript.indexOf("clothes") >= 0) || (final_transcript.indexOf("jaws") >= 0)) {
+						$("#story_form_close").click();
+						//console.log("formular closed.");
+						recDescription = false;
+						storyMod = false;
+						description = '';
+						document.getElementById("final_command").innerHTML = ("Story Modal closed");
+						$('#load').hide(); // hide loader element
+					} else if ((final_transcript.indexOf("next") >= 0)) {
+						$("#story_form_submit").click();
+						//console.log("Next step story element.");
+						recDescription = false;
+						storyMod = false;
+						description = '';
+						document.getElementById("final_command").innerHTML = ("");
+						$('#load').hide(); // hide loader element
+					
+					}
+				}
+				
+				//////////////////////////////////////////////////////////
+                /////Navigation story element modal///////////////////////
+                //////////////////////////////////////////////////////////
+				if(storyElemMod) {
+					if ((final_transcript.indexOf("cancel") >= 0) || (final_transcript.indexOf("cancer") >= 0)) {
+						$("#story_elem_form_close").click();
+						//console.log("formular closed.");
+						recDescription = false;
+						storyElemMod = false;
+						description = '';
+						document.getElementById("final_command").innerHTML = ("Story Element Modal closed");
+						$('#load').hide(); // hide loader element
+					}
+					if ((final_transcript.indexOf("create story") >= 0) || (final_transcript.indexOf("creative story") >= 0) || (final_transcript.indexOf("38 story") >= 0) || (final_transcript.indexOf("predatory") >= 0)) {
+						$("#story_elem_form_submit").click();
+						//console.log("formular closed.");
+						recDescription = false;
+						storyElemMod = false;
+						description = '';
+						document.getElementById("final_command").innerHTML = ("Story Element Modal submitted");
+						$('#load').hide(); // hide loader element
+					}
+					if ((final_transcript.indexOf("next") >= 0)) {
+						$("#story_elem_form_next").click();
+						//console.log("formular closed.");
+						description = '';
+						document.getElementById("final_command").innerHTML = ("");
+						$('#load').hide(); // hide loader element
+					}
+					if ((final_transcript.indexOf("previous") >= 0)) {
+						$("#story_elem_form_prev").click();
+						//console.log("formular closed.");
+						description = '';
+						document.getElementById("final_command").innerHTML = ("");
+						$('#load').hide(); // hide loader element
+					}
+				}
+				
+				//////////////////////////////////////////////////////////
+                /////Navigation story submit modal///////////////////////
+                //////////////////////////////////////////////////////////
+				if(storySubMod) {
+					if ((final_transcript.indexOf("close") >= 0) || (final_transcript.indexOf("clothes") >= 0)) {
+						$("#story_form_close").click();
+						//console.log("formular closed.");
+						recDescription = false;
+						storySubMod = false;
+						description = '';
+						document.getElementById("final_command").innerHTML = ("Story Submit Modal closed");
+						$('#load').hide(); // hide loader element
+					}
+					if ((final_transcript.indexOf("submit") >= 0)) {
+						$("#story_form_submit").click();
+						//console.log("formular closed.");
+						recDescription = false;
+						storySubMod = false;
+						description = '';
+						document.getElementById("final_command").innerHTML = ("Story Submit Modal submitted");
+						$('#load').hide(); // hide loader element
+					}
+				}
+				
+				
 
                 //////////////////////////////////////////////////////////
                 /////  navigation controls Tutorial//////////////////////
