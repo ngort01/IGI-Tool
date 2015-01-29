@@ -7,13 +7,6 @@
         var lon = 7.6286;
         var lat = 51.9629;
 		
-		//GeoLoc marker 
-		var blueIcon = L.icon({
-		iconUrl: 'img/pos.png',
-
-		iconSize:     [70, 90], // size of the icon
-		iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-		});
 
         // map definition
         self.map = L.map("map", {
@@ -38,18 +31,7 @@
             showMarker: false
         }).addTo(self.map);	
 		
-		//get my Location//
-		$('.GetMe').on('click', function(){
-			self.map.locate();
-		});
 
-		self.map.on('locationfound', onLocationFound);
-		function onLocationFound(e) {
-			L.marker((e.latlng),{icon: blueIcon}).addTo(self.map);
-			self.map.panTo(e.latlng);
-			self.map.stopLocate();
-			
-		}
     }
 
     window.Map = Map;
@@ -76,6 +58,26 @@ function init() {
     storyline.addTo(m.map);
     var lc = new LeapController(m.map);
     lc.init();
+	
+			//GeoLoc marker 
+		var blueIcon = L.icon({
+		iconUrl: 'img/pos.png',
+
+		iconSize:     [70, 90], // size of the icon
+		iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+		});
+			//get my Location//
+		$('.GetMe').on('click', function(){
+			m.map.locate();
+		});
+
+		m.map.on('locationfound', onLocationFound);
+		function onLocationFound(e) {
+			L.marker((e.latlng),{icon: blueIcon}).addTo(m.map);
+			m.map.panTo(e.latlng);
+			m.map.stopLocate();
+			
+		}
 }
 
 /**
@@ -159,32 +161,51 @@ $(document).ready(function() {
 		html: "true"
     });
 	
-	// remove POI when poi modal is closed
+	// poi modal events
+	$('#POImodal').on('show.bs.modal', function(e) {
+		paused = true;
+		$('#lm').tooltip('hide');
+    })
 	$('#POImodal').on('hide.bs.modal', function(e) {
         remove_poi();
-		$('#close').tooltip('hide');
+		paused = false;
     })
 	
-	// hide tooltip that tells how to create story elements for a story
-	$('#story_elem_modal').on('shown.bs.modal', function(e) {
+	// story modal events
+	$('#story_modal').on('hide.bs.modal', function(e) {
+		paused = false;
+		storyMod = false;
+    })
+	
+	$('#story_modal').on('show.bs.modal', function(e) {
+		paused = true;
+		storyMod = true;
+    })
+	
+	
+	// story element modal events
+	$('#story_elem_modal').on('show.bs.modal', function(e) {
         $('#select').tooltip('hide');
 		paused = true;
+		storyElemMod = true;
     })
 	
-	// show tooltip that tells how to create story elements for a story
 	$('#story_elem_modal').on('hide.bs.modal', function(e) {
         $('#select').tooltip('show');
-		$('#close').tooltip('hide');
+		storyElemMod = false;
+		paused = false;
     })
 	
-	// hide tooltip that tells how to create story elements for a story
-	$('#story_submit_modal').on('shown.bs.modal', function(e) {
+	// story_submit_modal events
+	$('#story_submit_modal').on('show.bs.modal', function(e) {
         $('#select').tooltip('hide');
 		paused = true;
+		storySubMod = true;
     })
 	
 	$('#story_submit_modal').on('hide.bs.modal', function(e) {
-        $('#close').tooltip('hide');
+		storySubMod = false;
+		paused = false;
     })
 	
 	// show tooltip on how to create a poi when hovering the corresponding menu item
@@ -192,15 +213,14 @@ $(document).ready(function() {
 		$('#lm').tooltip('toggle');
 	});
 	
-	// enable map interaction when story modal closes
-	$('#story_modal').on('hide.bs.modal', function(e) {
-		paused = false;
-		$('#close').tooltip('hide');
-    })
 	
 	// show tooltip that tells how to close modals by swipe
-	$('#story_elem_modal, #story_submit_modal, #POImodal, #story_modal').on('shown.bs.modal', function(e) {
+	$('#story_elem_modal, #story_submit_modal, #POImodal, #story_modal').on('show.bs.modal', function(e) {
         $('#close').tooltip('show');
+    })
+	
+	$('#story_elem_modal, #story_submit_modal, #POImodal, #story_modal').on('hide.bs.modal', function(e) {
+        $('#close').tooltip('hide');
     })
 	
 	

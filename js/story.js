@@ -13,7 +13,6 @@ Create story
 function create_story() {
     creating_story = true; // entering story creation mode
     $('#story_modal').modal('toggle');
-    paused = true; // map interaction is paused
 }
 
 
@@ -77,7 +76,6 @@ function submit_story() {
     addStory(story_name, story_description, story_elem_ids); // add to database
     $("#story_name").val(""); //clear story modal input fields
     $("#story_description").val("");
-    paused = false; // enable map interaction
     creating_story = false; // disable story creation mode
 }
 
@@ -89,8 +87,6 @@ function cancel_story() {
     $("#story_name").val(""); //clear story modal input fields
     $("#story_description").val("");
     storyline.spliceLatLngs(0, storyline.getLatLngs().length);
-
-    paused = false; // enable map interaction
     creating_story = false; // disable story creation mode
     for (var i = 0; i < story_elem_ids.length; i++) { // delete created story elements
         deleteStoryElement(story_elem_ids[i]);

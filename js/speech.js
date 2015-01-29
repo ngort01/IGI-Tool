@@ -101,6 +101,12 @@ var webSpeech = function() {
 					} else if ((final_transcript.indexOf("start tutorial") >= 0)) {
 						tour.restart(); 
 						tutorial = true;
+					} else if ((final_transcript.indexOf("get my location") >= 0)) {
+						$('.GetMe').click();
+					} else if ((final_transcript.indexOf("open menu") >= 0)|| (final_transcript.indexOf("hope menu") >= 0)) {
+						$.fn.ferroMenu.toggleMenu("#nav");
+					} else if ((final_transcript.indexOf("close menu") >= 0)|| (final_transcript.indexOf("clothes menu") >= 0)) {
+						$.fn.ferroMenu.toggleMenu("#nav");
 					//////////////////////////////////////////////////////////
 					/////////////////////// Multimodal////////////////////////
 					//////////////////////////////////////////////////////////
@@ -112,7 +118,6 @@ var webSpeech = function() {
 							startFormRecording();
 							$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
 							$("#poi_lon").val(POI.getLatLng().lng);
-							paused = true;
 						} else { // error handling
 							document.getElementById("final_command").innerHTML = ("Hand position not found!");
 							document.getElementById("final_command").style.color="red";
@@ -137,7 +142,6 @@ var webSpeech = function() {
                 if ((recDescription) && ((final_transcript.indexOf("submit") >= 0) || (final_transcript.indexOf("sum") >= 0))) {
                     recDescription = false;
                     $("#poi_form_submit").click();
-                    submit_POI();
                     turnOnMapControlsPerSpeech();
                     //console.log("Dictation completed.");
                     final_transcript = '';
@@ -174,18 +178,10 @@ var webSpeech = function() {
 				if(storyMod) { // check for story modal
 					if ((final_transcript.indexOf("close") >= 0) || (final_transcript.indexOf("clothes") >= 0) || (final_transcript.indexOf("jaws") >= 0)) {
 						$("#story_form_close").click();
-						//console.log("formular closed.");
-						recDescription = false;
-						storyMod = false;
-						description = '';
 						document.getElementById("final_command").innerHTML = ("Story Modal closed");
 						$('#load').hide(); // hide loader element
 					} else if ((final_transcript.indexOf("next") >= 0)) {
 						$("#story_form_submit").click();
-						//console.log("Next step story element.");
-						recDescription = false;
-						storyMod = false;
-						description = '';
 						document.getElementById("final_command").innerHTML = ("");
 						$('#load').hide(); // hide loader element
 					
@@ -198,33 +194,21 @@ var webSpeech = function() {
 				if(storyElemMod) {
 					if ((final_transcript.indexOf("cancel") >= 0) || (final_transcript.indexOf("cancer") >= 0)) {
 						$("#story_elem_form_close").click();
-						//console.log("formular closed.");
-						recDescription = false;
-						storyElemMod = false;
-						description = '';
 						document.getElementById("final_command").innerHTML = ("Story Element Modal closed");
 						$('#load').hide(); // hide loader element
 					}
 					if ((final_transcript.indexOf("create story") >= 0) || (final_transcript.indexOf("creative story") >= 0) || (final_transcript.indexOf("38 story") >= 0) || (final_transcript.indexOf("predatory") >= 0)) {
 						$("#story_elem_form_submit").click();
-						//console.log("formular closed.");
-						recDescription = false;
-						storyElemMod = false;
-						description = '';
 						document.getElementById("final_command").innerHTML = ("Story Element Modal submitted");
 						$('#load').hide(); // hide loader element
 					}
 					if ((final_transcript.indexOf("next") >= 0)) {
 						$("#story_elem_form_next").click();
-						//console.log("formular closed.");
-						description = '';
 						document.getElementById("final_command").innerHTML = ("");
 						$('#load').hide(); // hide loader element
 					}
 					if ((final_transcript.indexOf("previous") >= 0)) {
 						$("#story_elem_form_prev").click();
-						//console.log("formular closed.");
-						description = '';
 						document.getElementById("final_command").innerHTML = ("");
 						$('#load').hide(); // hide loader element
 					}
@@ -234,21 +218,13 @@ var webSpeech = function() {
                 /////Navigation story submit modal///////////////////////
                 //////////////////////////////////////////////////////////
 				if(storySubMod) {
-					if ((final_transcript.indexOf("close") >= 0) || (final_transcript.indexOf("clothes") >= 0)) {
-						$("#story_form_close").click();
-						//console.log("formular closed.");
-						recDescription = false;
-						storySubMod = false;
-						description = '';
+					if ((final_transcript.indexOf("cancel") >= 0) || (final_transcript.indexOf("cancer") >= 0)) {
+						$("#story_sub_form_close").click();
 						document.getElementById("final_command").innerHTML = ("Story Submit Modal closed");
 						$('#load').hide(); // hide loader element
 					}
 					if ((final_transcript.indexOf("submit") >= 0)) {
-						$("#story_form_submit").click();
-						//console.log("formular closed.");
-						recDescription = false;
-						storySubMod = false;
-						description = '';
+						$("#story_sub_form_submit").click();
 						document.getElementById("final_command").innerHTML = ("Story Submit Modal submitted");
 						$('#load').hide(); // hide loader element
 					}

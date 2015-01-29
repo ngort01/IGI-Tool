@@ -16,18 +16,7 @@ body {
 	/*background-image: url("../img/bg.jpg");*/
 }
 	
-.jumbotron {
-	box-shadow: 0 8px 0px -8px #222;
-	opacity:0.95 !important;
-	color: white !important;
-	padding-top: 1px !important;
-	border-radius: 3px;
-	padding: 0em 0em;
-	margin-bottom: 0px;
-    	text-shadow: black 0.3em 0.3em 0.3em;
-    	background: transparent !important;
- 	
-}
+
 
 #gestures {
     
@@ -44,7 +33,6 @@ body {
 	border-radius: 6px;
 }
 
-/* of the following two,one is likely to be deleted */
 
 #load{
 position:absolute; 
@@ -114,5 +102,11 @@ a:hover {
 
 .tooltip-inner {
 	opacity:0.9;
+}
+
+#brand{
+width:200px;
+height:30px;
+margin-top: -7px;
 }
 

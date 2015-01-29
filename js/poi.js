@@ -3,7 +3,7 @@ All functions related to POI's
 **/
 var db_url = "https://api.mongolab.com/api/1/databases/igi-tool-db";
 var poi_url = db_url + "/collections/pois";
-var api_key = "2Q1SmomE3Hihh_MqC4nshAwWRowZSeiT";
+var api_key = "";
 
 // layer group for all the pois
 var pois = L.layerGroup();
@@ -139,8 +139,6 @@ function setPOI(e) {
     $('#POImodal').modal('toggle'); // open poi creation form
     $("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
     $("#poi_lon").val(POI.getLatLng().lng);
-    paused = true;
-	//$('#lm').tooltip('toggle');
 }
 
 
@@ -155,5 +153,4 @@ function submit_POI() {
     var descr = $("#poi_description").val();
     addPoi(name, descr, lat, lon);
     $('#POImodal').modal('toggle');
-    paused = false;
 }

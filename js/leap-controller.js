@@ -1,5 +1,6 @@
 var newCenter; // leaflet coordinates of the stabilizedPalmPosition
 var initialTip = false;
+var handMarker = false;
 /**
 Gestures and corresponding map events
 **/
@@ -45,8 +46,6 @@ Gestures and corresponding map events
         };
 		
         Leap.loop(controllerOptions, function(frame) {
-			if (!paused) { // map interactions paused if menu is opened
-			
 			if (frame.hands.length == 0 && !initialTip) {
 				$('#zoom').tooltip('show');	
 				initialTip = true;
@@ -54,6 +53,8 @@ Gestures and corresponding map events
 				$('#zoom').tooltip('hide');	
 				initialTip = false;			
 			}
+			
+			if (!paused) { // map interactions paused if menu is opened
 			
             // handmarkers
             markHands(frame)
@@ -91,7 +92,6 @@ Gestures and corresponding map events
 								}
 							} else { //vertical
 								if(gesture.direction[1] > 0){ // swipe up -> scroll down
-									//console.log("swipe");
 									$('#gestures').slimScroll({ scrollBy: '20px' });
 								} else { // swipe down -> scroll up
 									$('#gestures').slimScroll({ scrollBy: '-20px' });
@@ -116,7 +116,7 @@ Gestures and corresponding map events
 				if (frame.hands[0].pinchStrength > 0.9 && settingPOI == true) {
 					POI.setLatLng(newCenter);
 				} else if (frame.hands[0].pinchStrength == 0 && settingPOI == true) {
-					$('#lm').tooltip('toggle');
+					$('#lm').tooltip('hide');
 					settingPOI = false;
 					$('#POImodal').modal('toggle') // open poi creation form
 					$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
@@ -330,13 +330,12 @@ Gestures and corresponding map events
 			}
 			
 			// if POI creation is selected by pinching
-			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.9) {				
+			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.9) {	
 				$.fn.ferroMenu.toggleMenu("#nav"); // close menu -> map interaction is enabled
 				POI = L.marker(self.map.getCenter());
 				pois.addLayer(POI);
 				settingPOI = true;
 			} else if (menuItems[curMenuItem].id == "story" && frame.hands[0].pinchStrength > 0.9) {
-				console.log(frame.hands[0]);
 				$.fn.ferroMenu.toggleMenu("#nav");
 				create_story();
 			}
@@ -357,24 +356,16 @@ Gestures and corresponding map events
 						if (isHorizontal && gesture.direction[0] < 0) { //swipe left
 						//console.log(gesture.type);
 							if ($('#POImodal').hasClass('in')) {
-								$('#POImodal').modal('hide');
-								paused = false; // enable map controls
-								stopFormRecording();
+								$("#poi_form_close").click();
 							}
 							if ($('#story_modal').hasClass('in')) {
-								$('#story_modal').modal('hide');
-								paused = false; // enable map controls
-								cancel_story();
+								$("#story_form_close").click();
 							}
 							if ($('#story_submit_modal').hasClass('in')) {
-								$('#story_submit_modal').modal('hide');
-								paused = false; // enable map controls
-								cancel_story();
+								$("#story_sub_form_close").click();
 							}
 							if ($('#story_elem_modal').hasClass('in')) {
-								$('#story_elem_modal').modal('hide');
-								paused = false; // enable map controls
-								cancel_story();
+								$("#story_elem_form_close").click();	
 							}
 						}
 					}

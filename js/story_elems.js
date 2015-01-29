@@ -76,7 +76,6 @@ function submit_story_elem(f) {
     var tag_id = "54845912e4b05a496d0c5f4e"; //placeholder...!!!
     addStoryElement(poi_id, name, tag_id, abstr, text, f);
     $('#story_elem_modal').modal('toggle');
-    paused = false; // enable map interaction
 }
 
 

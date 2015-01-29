@@ -53,8 +53,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="poi_form_close" class="btn btn-default" data-dismiss="modal" 
-							onclick="javascript: 	stopFormRecording(); 
-													paused = false;">Close</button>
+							onclick="javascript: 	stopFormRecording();">Close</button>
                     <button type="button" id="poi_form_submit"class="btn btn-primary" onclick="javascript: submit_POI(); stopFormRecording();">Submit</button>
                 </div>
             </div>
@@ -84,14 +83,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="story_form_close" class="btn btn-default" data-dismiss="modal" 
-							onclick="javascript: 	stopFormRecording(); 
-													paused = false; 
-													creating_story = false;">Close</button>
+							onclick="javascript: 	creating_story = false;">Close</button>
                     <button type="button" id="story_form_submit"class="btn btn-primary" 
-							onclick="javascript: 	stopFormRecording(); 
-													$('#story_modal').modal('toggle');
-													$('#select').tooltip('show');
-													storyElemMod = true;" >Next</button>
+							onclick="javascript: 	$('#story_modal').modal('toggle');
+													$('#select').tooltip('show');" >Next</button>
                 </div>
             </div>
         </div>
@@ -127,17 +122,15 @@
 							</tr>
 						</thead>
 						<tbody id= "tbody">
-
+							
 						</tbody>
 					</table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="story_form_close" class="btn btn-default" data-dismiss="modal" 
-							onclick="javascript: 	stopFormRecording(); 
-													cancel_story();">Close</button>
-                    <button type="button" id="story_form_submit"class="btn btn-primary" 
-							onclick="javascript: 	stopFormRecording(); 
-													submit_story();">Submit</button>
+                    <button type="button" id="story_sub_form_close" class="btn btn-default" data-dismiss="modal" 
+							onclick="javascript: 	cancel_story();">Cancel</button>
+                    <button type="button" id="story_sub_form_submit"class="btn btn-primary" 
+							onclick="javascript: 	submit_story();">Submit</button>
                 </div>
             </div>
         </div>
@@ -174,20 +167,14 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="story_elem_form_close" class="btn btn-default" data-dismiss="modal" 
-							onclick="javascript: 	stopFormRecording(); 
-													cancel_story();">Cancel</button>
+							onclick="javascript:	cancel_story();">Cancel</button>
 					<button type="button" id="story_elem_form_prev"class="btn btn-default" 
-							onclick="javascript: 	stopFormRecording(); 
-													paused = false;
-													storyline.spliceLatLngs(storyline.getLatLngs().length-1, 1);
+							onclick="javascript: 	storyline.spliceLatLngs(storyline.getLatLngs().length-1, 1);
 													$('#story_elem_modal').modal('toggle');">Previous</button>
                     <button type="button" id="story_elem_form_next"class="btn btn-default" 
-							onclick="javascript: 	stopFormRecording(); 
-													submit_story_elem();">Next</button>
+							onclick="javascript: 	submit_story_elem();">Next</button>
 					<button type="button" id="story_elem_form_submit"class="btn btn-primary" 
-							onclick="javascript: 	stopFormRecording(); 
-													submit_story_elem(story_submit_modal);
-													storySubMod = true;">Create Story</button>
+							onclick="javascript: 	submit_story_elem(story_submit_modal);">Create Story</button>
                 </div>
             </div>
         </div>
@@ -207,7 +194,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-            <a class="navbar-brand" href="#">Münstory</a>
+            <a class="navbar-brand" href="#">
+				<img id="brand" alt="Brand" src="img/brand.png">
+			</a>
             <hr>
             </div>
 			
@@ -251,7 +240,7 @@
 				</tbody>
 			</table>
 			<p>
-				You can click any button in input forms by just saying its title.
+				You can click any button by just saying its title.
 			</p>
 			<br>
 			Say "Thank you!" to close this window.'>Need help? Say "Help me!".</div>
@@ -303,7 +292,7 @@
         <li><a id="poi" data-toggle="tooltip" title="Create POI" 
 				href="javascript:m.map.on('click', setPOI);startFormRecording(event); $.fn.ferroMenu.toggleMenu('#nav');"><i class="icon-map-marker"></i></a></li>
         <li><a id="story" data-toggle="tooltip" title="Create Story" 
-				href="javascript:create_story(); $.fn.ferroMenu.toggleMenu('#nav'); storyMod = true;"><i class="icon-book"></i></a></li>
+				href="javascript:create_story(); $.fn.ferroMenu.toggleMenu('#nav');"><i class="icon-book"></i></a></li>
     </ul>
 
 	<!-------------------------------------------------------------------------------------------->
