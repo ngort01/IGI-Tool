@@ -15,7 +15,7 @@ var webSpeech = function() {
 
     function voiceStart(event) {
         $('#load').show();
-		document.getElementById("final_command").style.color="black";
+		document.getElementById("final_command").style.color="white";
     }
 
 
