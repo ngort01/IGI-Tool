@@ -45,13 +45,18 @@
 
 	<!-- CONTENT -->
 
-		<h2>Upload and show images:</h2>
+		<h2>Upload images</h2>
 		
-		<h3>Add a new image file to a point of interest:</h3>
-		<form id="new-img-form" action="/dbml/uploadImg.php" method="post" enctype="multipart/form-data">
+		<h3>Upload and add a new image file to a point of interest:</h3>
+		<form id="new-img-form" action="/db/uploadImg.php" method="post" enctype="multipart/form-data">
 		    <input id="new-img-name" type="text" size="16" placeholder="Name"/>
-		    <select id="new-img-poi" type="text" size="1" placeholder="Select POI..."/>
-		    <input id="new-img-filename" type="file" name="new-img-filename"size="16"/>
+		    <br>
+		    <input id="new-img-poi-add" type="checkbox"/>Add to POI
+		    <select id="new-img-poi" type="text" size="1"></select>
+		    <br>
+		    <input id="new-img-filename" type="file" name="new-img-file"size="16"/>
+		    <br>
+		    <input id="submit-result-mode" type="checkbox"/>Full results (or just image ID) 
 			<input type="submit" value="upload" name="submit"/>
 		    <!-- button id="submit-btn-img">Submit</button -->
 		</form>
@@ -60,7 +65,6 @@
 		<!-- SCRIPTS -->
 		<script type="text/javascript">
 
-			// var base_url = "localhost";
 			var base_url = "http://GIV-INTERACTION.uni-muenster.de";
 
 			var uploadImg_url	= base_url + "/dbml/uploadImg.php";
@@ -103,7 +107,24 @@
 
 			// add selected POI ID to the form's action url
 			jQuery("#new-img-form").click(function() {
-				jQuery("#new-img-form").attr("action", "/dbml/uploadImg.php?poi_oid=" + jQuery("#new-img-poi").val() + "&display_name=" + jQuery("#new-img-name").val());
+				
+					if (jQuery("#new-img-poi-add").is(":checked")) {
+						var add = "true";
+					} else {
+						var add = "false";
+					}
+					
+					if (jQuery("#submit-result-mode").is(":checked")) {
+						var rm = "full";
+					} else {
+						var rm = null;
+					} 
+					jQuery("#new-img-form").attr("action",
+							"/db/uploadImg.php?poi_oid=" + jQuery("#new-img-poi").val() 
+							+ "&add_to_poi=" + add 
+							+ "&display_name=" + jQuery("#new-img-name").val() 
+							+ "&result_mode=" + rm
+						);
 				}
 			);
 

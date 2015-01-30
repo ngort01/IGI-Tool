@@ -46,29 +46,22 @@
 
 	<!-- CONTENT -->
 
-		<h2>Upload images</h2>
+		<h2>Add Images</h2>
 		
-		<h3>Upload and add a new image file to a point of interest:</h3>
-		<form id="new-img-form" action="/db/uploadImg.php" method="post" enctype="multipart/form-data">
+		<h3>Add an already uploaded image to a point of interest:</h3>
+		<form id="new-img-form" action="/db/updatePoi.php" method="post" enctype="multipart/form-data">
 		    <input id="new-img-name" type="text" size="16" placeholder="Name"/>
+		    <input id="new-img-oid" type="text" size="16" placeholder="ID"/>
 		    <br>
-		    <input id="new-img-poi-add" type="checkbox"/>Add to POI
 		    <select id="new-img-poi" type="text" size="1"></select>
-		    <br>
-		    <input id="new-img-filename" type="file" name="new-img-file"size="16"/>
-		    <br>
-		    <input id="submit-result-mode" type="checkbox"/>Full results (or just image ID) 
 			<input type="submit" value="upload" name="submit"/>
-		    <!-- button id="submit-btn-img">Submit</button -->
 		</form>
-		<div id="submit-img-result"></div>
 
 		<!-- SCRIPTS -->
 		<script type="text/javascript">
 
 			var base_url = "http://GIV-INTERACTION.uni-muenster.de";
 
-			var uploadImg_url	= base_url + "/db/uploadImg.php";
 			var getPoi_url		= base_url + "/db/getPoi.php";
 
 		
@@ -109,22 +102,10 @@
 			// add selected POI ID to the form's action url
 			jQuery("#new-img-form").click(function() {
 				
-					if (jQuery("#new-img-poi-add").is(":checked")) {
-						var add = "true";
-					} else {
-						var add = "false";
-					}
-					
-					if (jQuery("#submit-result-mode").is(":checked")) {
-						var rm = "full";
-					} else {
-						var rm = null;
-					} 
 					jQuery("#new-img-form").attr("action",
-							"/db/uploadImg.php?poi_oid=" + jQuery("#new-img-poi").val() 
-							+ "&add_to_poi=" + add 
+							"/db/updatePoi.php?oid=" + jQuery("#new-img-poi").val() 
+							+ "&new_img_oid=" + jQuery("#new-img-oid").val()
 							+ "&display_name=" + jQuery("#new-img-name").val() 
-							+ "&result_mode=" + rm
 						);
 				}
 			);
