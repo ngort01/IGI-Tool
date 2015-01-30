@@ -6,7 +6,7 @@ var poi_url = db_url + "/collections/pois";
 var api_key = "";
 
 // layer group for all the pois
-var pois = L.layerGroup();
+var pois = new L.MarkerClusterGroup();
 
 /**
 get and create pois
