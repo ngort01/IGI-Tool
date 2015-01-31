@@ -11,34 +11,82 @@
 	 * $uri = "mongodb://myuser:mypass@host1:port1,host2:port:2/mydb";
 	 * $options = array("replicaSet" => "myReplicaSet", "connectTimeoutMS" => 30000);
 	 */
-	$client = new MongoClient($uri, $options);		// new Mongo('localhost');
+	$client = new MongoClient($uri, $options);
 	$db = $client->selectDB("igi-tool-db");
 
-	// get tag collection
-	$collection = $db->pois;
-	
 	// get request parameters
 	$fileId = $_REQUEST['oid'];
+	$mode = $_REQUEST['mode'];
 
-	try {
-		$files = $db->fs->files;	
-		$fileName1 = $files->findOne(array('_id' => new MongoId($fileId)));
-		$fileName = $fileName1['filename'];
-
-		$grid = $db->getGridFS();
-		$file = $grid->findOne(array('filename' => $fileName));
-		$files = $db->fs->files;
-		$file1 = $files->findOne(array('filename' => $fileId));
+	if (is_null($fileId) || $fileId === "") {
 		
-		if ($file) {
-			header('Content-type:image/png');
-			echo $file->getBytes();
-		} else {
-			echo "No image found!";
-		}
+		// list all images
+		
+		if ($mode === 'uploaded' || is_null($mode) || $mode === '') {
+			
+			// get all uploaded pictures
+			
+			$collection = $db -> fs -> files;
+			$img_cur = $collection -> find();
+				
+			if (count($img_cur) > 0 ) {
+			
+				foreach ($img_cur as $img) {
+	
+					echo json_encode($img) . '<br>';
+				}
+			} else {
+				echo "No images found!";
+			}
+			
+		} elseif ($mode === 'byPoi') {
 
-	} catch (Exception $e) {
-		echo $e->getMessage();
+			// get only images, connected to an poi
+			
+			$collection = $db -> pois;
+			$poi_cur = $collection -> find( array('picture' => array('$exists' => 'true')) );
+			
+			if (count($poi_cur) > 0 ) {
+	
+				foreach ($poi_cur as $poi) {
+					
+					if (count($poi['picture']['data']) == 1) {
+						// handle single pictures
+						
+						echo json_encode($poi['picture']) . '<br>';
+						
+					} else {
+						// handle picture arrays
+						
+						foreach ($poi['picture'] as $pic) {
+							echo json_encode($pic) . '<br>';
+						}
+					}
+				}
+			} else {
+				echo "No images found!";
+			}
+		}
+		
+	} else {
+		
+		// get a single image
+		try {
+		
+			$grid = $db->getGridFS();
+			$file = $grid -> findOne( array('_id' => new MongoId($fileId)) );
+		
+			if ($file) {
+				header('Content-type:image/png');
+				echo $file->getBytes();
+			} else {
+				echo "No image found!";
+			}
+		
+		} catch (Exception $e) {
+			echo $e->getMessage();
+		}
 	}
+	
 	$client->close();
 ?>

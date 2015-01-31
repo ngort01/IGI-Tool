@@ -18,26 +18,7 @@
 				font-size: medium;
 			}
 			table {
-				width: 67%;
 				font-family: arial, sans-serif;
-			}
-			thead {
-				font-weight: bold;
-				background-color: #CCCCCC;
-			}
-			tbody {
-				background-color: #EEEEEE;
-			}
-			td {
-				padding: 3px;
-			}
-			a.del {
-				font-weight: bold;
-				text-decoration: none;
-			}
-			a.poi {
-				font-weight: bold;
-				text-decoration: none;
 			}
 		</style>
 
@@ -50,16 +31,21 @@
 		
 		<h3>Upload and add a new image file to a point of interest:</h3>
 		<form id="new-img-form" action="/db/uploadImg.php" method="post" enctype="multipart/form-data">
-		    <input id="new-img-name" type="text" size="16" placeholder="Name"/>
-		    <br>
-		    <input id="new-img-poi-add" type="checkbox"/>Add to POI
-		    <select id="new-img-poi" type="text" size="1"></select>
-		    <br>
-		    <input id="new-img-filename" type="file" name="new-img-file"size="16"/>
-		    <br>
-		    <input id="submit-result-mode" type="checkbox"/>Full results (or just image ID) 
-			<input type="submit" value="upload" name="submit"/>
-		    <!-- button id="submit-btn-img">Submit</button -->
+		    <table>
+		    	<tbody>
+					<tr>
+						<td><input id="new-img-name" type="text" size="16" placeholder="Name"/></td>
+		    			<td><input id="new-img-filename" type="file" name="new-img-file"size="16"/></td>
+				    <tr>
+				    	<td><input id="new-img-poi-add" type="checkbox"/>Add to POI</td>
+		    			<td><select id="new-img-poi" size="1"></select></td>
+				    </tr>
+				    <tr>
+		    			<td><input id="submit-result-mode" type="checkbox"/>Full results (or just image ID)</td> 
+						<td><input type="submit" value="upload" name="submit"/></td>
+					</tr>
+				</tbody>
+			</table>
 		</form>
 		<div id="submit-img-result"></div>
 

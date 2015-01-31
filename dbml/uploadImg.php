@@ -136,9 +136,9 @@
 					
 					$count = $cur -> count();
 					if ($count > 0) {
-						echo 'The image "' . $display_name . '" has been added to POI "' . $poi_id . '".<br>';
+						echo 'The image "' . $display_name . '" has been added to POI "' . $poi_oid . '".<br>';
 					} else {
-						echo 'The image "' . $display_name . '" could not be added to POI "' . $poi_id . '".<br>';
+						echo 'The image "' . $display_name . '" could not be added to POI "' . $poi_oid . '".<br>';
 					}
 				}
 			}

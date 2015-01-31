@@ -95,6 +95,14 @@
 		if ($id) {
 			if ($result_mode === 'full') {
 				echo 'The file "' . $name . '" has been uploaded with ID "' . $id . '".<br>';
+				
+			} elseif ($result_mode === 'json') {
+				header('Content-Type: application/json');
+				echo json_encode( array(
+							'name' => $display_name,
+							'id' => '' . $id,
+							'size' => $_FILES["new-img-file"]["size"] )
+						 );
 			} else {
 				echo $id;
 			}
@@ -154,9 +162,9 @@
 					
 					$count = $cur -> count();
 					if ($count > 0) {
-						echo 'The image "' . $display_name . '" has been added to POI "' . $poi_id . '".<br>';
+						echo 'The image "' . $display_name . '" has been added to POI "' . $poi_oid . '".<br>';
 					} else {
-						echo 'The image "' . $display_name . '" could not be added to POI "' . $poi_id . '".<br>';
+						echo 'The image "' . $display_name . '" could not be added to POI "' . $poi_oid . '".<br>';
 					}
 				}
 			}
