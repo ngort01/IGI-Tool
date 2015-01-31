@@ -264,7 +264,7 @@ Gestures and corresponding map events
 	menuItems = $('#nav').find('a');			// menu items
 	prevMenuItem = null;						// previous selected menu items
 	curMenuItem = 0;							// currently selected menu item
-	var POI = null;
+	POI = null;
 	var settingPOI = false;						// toggle POI setting modus
 	menumode = false;							// check if menumode is active
 	menuopen = false;
@@ -332,7 +332,7 @@ Gestures and corresponding map events
 			// if POI creation is selected by pinching
 			if (menuItems[curMenuItem].id == "poi" && frame.hands[0].pinchStrength > 0.9) {	
 				$.fn.ferroMenu.toggleMenu("#nav"); // close menu -> map interaction is enabled
-				POI = L.marker(self.map.getCenter());
+				POI = new L.marker(self.map.getCenter());
 				pois.addLayer(POI);
 				settingPOI = true;
 			} else if (menuItems[curMenuItem].id == "story" && frame.hands[0].pinchStrength > 0.9) {

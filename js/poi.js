@@ -117,15 +117,10 @@ function addPoi(name, description, lat, lon) {
 remove last added POI from the map
 **/
 function remove_poi() {
-	var layers = pois.getLayers();
-	var id = layers[layers.length-1]._leaflet_id;
-	pois.eachLayer(function (layer) {
-		if (layer._leaflet_id === id){
-			pois.removeLayer(layer)
-		}
-	});
+	if (pois.hasLayer(POI)){
+		pois.removeLayer(POI);
+	}
 }
-
 
 
 /**

@@ -15,12 +15,13 @@ var webSpeech = function() {
 
     function voiceStart(event) {
         $('#load').show();
+		document.getElementById("final_command").innerHTML = ("");
 		document.getElementById("final_command").style.color="white";
     }
 
 
     function voiceEnd(event) {
-        $('#load').hide();
+        $('#load').hide(); // hide loader element
         count = 0;
     }
 
@@ -47,53 +48,41 @@ var webSpeech = function() {
                     if ((final_transcript.indexOf("zoom in") >= 0) || (final_transcript.indexOf("zombie") >= 0)) {
                         // Code for zooming in
                         m.map.zoomIn(1);
-                        //console.log("Zoomed in");
                         document.getElementById("final_command").innerHTML = ("Zoomed in");
                         final_transcript = '';
-                        $('#load').hide(); // hide loader element
                     } else if ((final_transcript.indexOf("zoom out") >= 0)) {
                         // Code for zooming out
                         m.map.zoomOut(1);
-                        //console.log("Zoomed out");
                         document.getElementById("final_command").innerHTML = ("Zoomed out");
                         final_transcript = '';
-                        $('#load').hide(); // hide loader element
                     } else if ((final_transcript.indexOf("left") >= 0) || (final_transcript.indexOf("net") >= 0) || (final_transcript.indexOf("live") >= 0) || (final_transcript.indexOf("lift") >= 0) || (final_transcript.indexOf("let") >= 0)) {
                         centerPoint = m.map.getCenter();
                         var delta = (m.map.getBounds().getEast() - m.map.getBounds().getWest()) / 4;
                         centerPoint.lng -= Math.abs(delta);
                         m.map.panTo(centerPoint);
-                        //console.log("Panned Left by " + Math.abs(delta));
                         document.getElementById("final_command").innerHTML = ("panned left");
                         final_transcript = '';
-                        $('#load').hide(); // hide loader element
                     } else if ((final_transcript.indexOf("right") >= 0) || (final_transcript.indexOf("white") >= 0) || (final_transcript.indexOf("fight") >= 0) || (final_transcript.indexOf("riot") >= 0) || (final_transcript.indexOf("Ryian") >= 0) || (final_transcript.indexOf("light") >= 0) || (final_transcript.indexOf("ride") >= 0)) {
                         centerPoint = m.map.getCenter();
                         var delta = (m.map.getBounds().getEast() - m.map.getBounds().getWest()) / 4;
                         centerPoint.lng += Math.abs(delta);
                         m.map.panTo(centerPoint);
-                        //console.log("Panned right by " + Math.abs(delta));
                         document.getElementById("final_command").innerHTML = ("panned right");
                         final_transcript = '';
-                        $('#load').hide(); // hide loader element
                     } else if ((final_transcript.indexOf("up") >= 0) || (final_transcript.indexOf("apple") >= 0) || (final_transcript.indexOf("app") >= 0)) {
                         centerPoint = m.map.getCenter();
                         var delta = (m.map.getBounds().getNorth() - m.map.getBounds().getSouth()) / 4;
                         centerPoint.lat += delta;
                         m.map.panTo(centerPoint);
-                        //console.log("Panned up by " + Math.abs(delta));
                         document.getElementById("final_command").innerHTML = ("panned up");
                         final_transcript = '';
-                        $('#load').hide(); // hide loader element
                     } else if ((final_transcript.indexOf("down") >= 0) || (final_transcript.indexOf("dawn") >= 0)) {
                         centerPoint = m.map.getCenter();
                         var delta = (m.map.getBounds().getNorth() - m.map.getBounds().getSouth()) / 4;
                         centerPoint.lat -= delta;
                         m.map.panTo(centerPoint);
-                        //console.log("Panned down by " + Math.abs(delta));		
                         document.getElementById("final_command").innerHTML = ("panned down");
                         final_transcript = '';
-                        $('#load').hide(); // hide loader element
 					} else if ((final_transcript.indexOf("help me") >= 0)) {
 						$('#voice_help').popover('show');
 					} else if ((final_transcript.indexOf("thank you") >= 0)) {
@@ -107,6 +96,8 @@ var webSpeech = function() {
 						$.fn.ferroMenu.toggleMenu("#nav");
 					} else if ((final_transcript.indexOf("close menu") >= 0)|| (final_transcript.indexOf("clothes menu") >= 0)) {
 						$.fn.ferroMenu.toggleMenu("#nav");
+					} else if ((final_transcript.indexOf("close menu") >= 0)|| (final_transcript.indexOf("create story") >= 0)) {
+						create_story();
 					//////////////////////////////////////////////////////////
 					/////////////////////// Multimodal////////////////////////
 					//////////////////////////////////////////////////////////
@@ -122,7 +113,7 @@ var webSpeech = function() {
 							document.getElementById("final_command").innerHTML = ("Hand position not found!");
 							document.getElementById("final_command").style.color="red";
 						}
-					} else if ((final_transcript.indexOf("click") >= 0) || (final_transcript.indexOf("pig") >= 0)) {
+					} else if ((final_transcript.indexOf("click") >= 0) || (final_transcript.indexOf("pig") >= 0) || (final_transcript.indexOf("play") >= 0)) {
 						if (handMarker) {
 							pois.eachLayer(function (layer) {
 								if (handMarker.getBounds().contains(layer.getLatLng())) {
@@ -147,7 +138,6 @@ var webSpeech = function() {
                     final_transcript = '';
                     description = '';
                     document.getElementById("final_command").innerHTML = ("POI submitted");
-                    $('#load').hide(); // hide loader element
                 } else if ((recDescription) && ((final_transcript.indexOf("close") >= 0) || (final_transcript.indexOf("clothes") >= 0) || (final_transcript.indexOf("jaws") >= 0))) {
                     $("#poi_form_close").click();
                     turnOnMapControlsPerSpeech();
@@ -155,13 +145,11 @@ var webSpeech = function() {
                     recDescription = false;
                     description = '';
                     document.getElementById("final_command").innerHTML = ("POI closed");
-                    $('#load').hide(); // hide loader element
                 } else if ((recDescription) && ((final_transcript.length) > 0)) {
                     description = description + capitalize(final_transcript) + ".";
                     $("#poi_description").val(description);
                     //console.log("\"Description\"-Field augmented.");
                     final_transcript = '';
-                    $('#load').hide(); // hide loader element
                 } else if ((recName) && ((final_transcript.length) > 0)) {
                     $("#poi_name").val(capitalize(final_transcript));
                     recName = false;
@@ -169,7 +157,6 @@ var webSpeech = function() {
                     //console.log("\"Name\"-Field filled.");
                     final_transcript = '';
                     $('#poi_description').focus();
-                    $('#load').hide(); // hide loader element
                 }
 				
 				//////////////////////////////////////////////////////////
@@ -179,12 +166,9 @@ var webSpeech = function() {
 					if ((final_transcript.indexOf("close") >= 0) || (final_transcript.indexOf("clothes") >= 0) || (final_transcript.indexOf("jaws") >= 0)) {
 						$("#story_form_close").click();
 						document.getElementById("final_command").innerHTML = ("Story Modal closed");
-						$('#load').hide(); // hide loader element
 					} else if ((final_transcript.indexOf("next") >= 0)) {
 						$("#story_form_submit").click();
-						document.getElementById("final_command").innerHTML = ("");
-						$('#load').hide(); // hide loader element
-					
+						document.getElementById("final_command").innerHTML = ("");					
 					}
 				}
 				
@@ -195,22 +179,18 @@ var webSpeech = function() {
 					if ((final_transcript.indexOf("cancel") >= 0) || (final_transcript.indexOf("cancer") >= 0)) {
 						$("#story_elem_form_close").click();
 						document.getElementById("final_command").innerHTML = ("Story Element Modal closed");
-						$('#load').hide(); // hide loader element
 					}
 					if ((final_transcript.indexOf("create story") >= 0) || (final_transcript.indexOf("creative story") >= 0) || (final_transcript.indexOf("38 story") >= 0) || (final_transcript.indexOf("predatory") >= 0)) {
 						$("#story_elem_form_submit").click();
 						document.getElementById("final_command").innerHTML = ("Story Element Modal submitted");
-						$('#load').hide(); // hide loader element
 					}
 					if ((final_transcript.indexOf("next") >= 0)) {
 						$("#story_elem_form_next").click();
 						document.getElementById("final_command").innerHTML = ("");
-						$('#load').hide(); // hide loader element
 					}
 					if ((final_transcript.indexOf("previous") >= 0)) {
 						$("#story_elem_form_prev").click();
 						document.getElementById("final_command").innerHTML = ("");
-						$('#load').hide(); // hide loader element
 					}
 				}
 				
@@ -221,12 +201,10 @@ var webSpeech = function() {
 					if ((final_transcript.indexOf("cancel") >= 0) || (final_transcript.indexOf("cancer") >= 0)) {
 						$("#story_sub_form_close").click();
 						document.getElementById("final_command").innerHTML = ("Story Submit Modal closed");
-						$('#load').hide(); // hide loader element
 					}
 					if ((final_transcript.indexOf("submit") >= 0)) {
 						$("#story_sub_form_submit").click();
 						document.getElementById("final_command").innerHTML = ("Story Submit Modal submitted");
-						$('#load').hide(); // hide loader element
 					}
 				}
 				
@@ -241,21 +219,18 @@ var webSpeech = function() {
                         //console.log("Next");
                         document.getElementById("final_command").innerHTML = ("Next step");
                         final_transcript = '';
-                        $('#load').hide(); // hide loader element
                     } else if ((final_transcript.indexOf("previous") >= 0)) {
                         // Code for navigate tutorial
                         tour.prev();
                         //console.log("previous");
                         document.getElementById("final_command").innerHTML = ("Previous step");
                         final_transcript = '';
-                        $('#load').hide(); // hide loader element
                     } else if (((final_transcript.indexOf("end") >= 0) || (final_transcript.indexOf("evans")) >= 0)) {
                         tutorial = false;
                         tour.end();
                         //console.log("End");
                         document.getElementById("final_command").innerHTML = ("End tour");
                         final_transcript = '';
-                        $('#load').hide(); // hide loader element
                     }
                 }
                 // void command ended
