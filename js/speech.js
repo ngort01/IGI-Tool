@@ -96,7 +96,8 @@ var webSpeech = function() {
 						$.fn.ferroMenu.toggleMenu("#nav");
 					} else if ((final_transcript.indexOf("close menu") >= 0)|| (final_transcript.indexOf("clothes menu") >= 0)) {
 						$.fn.ferroMenu.toggleMenu("#nav");
-					} else if ((final_transcript.indexOf("close menu") >= 0)|| (final_transcript.indexOf("create story") >= 0)) {
+					} else if ((final_transcript.indexOf("create story") >= 0) || (final_transcript.indexOf("creative story") >= 0) || (final_transcript.indexOf("38 story") >= 0) 
+						|| (final_transcript.indexOf("predatory") >= 0) ||(final_transcript.indexOf("create star")>= 0)) {
 						create_story();
 					//////////////////////////////////////////////////////////
 					/////////////////////// Multimodal////////////////////////
@@ -113,7 +114,8 @@ var webSpeech = function() {
 							document.getElementById("final_command").innerHTML = ("Hand position not found!");
 							document.getElementById("final_command").style.color="red";
 						}
-					} else if ((final_transcript.indexOf("click") >= 0) || (final_transcript.indexOf("pig") >= 0) || (final_transcript.indexOf("play") >= 0)) {
+					} else if ((final_transcript.indexOf("click") >= 0) || (final_transcript.indexOf("pig") >= 0) || (final_transcript.indexOf("play") >= 0)
+								|| (final_transcript.indexOf("pic") >= 0)) {
 						if (handMarker) {
 							pois.eachLayer(function (layer) {
 								if (handMarker.getBounds().contains(layer.getLatLng())) {
@@ -180,7 +182,8 @@ var webSpeech = function() {
 						$("#story_elem_form_close").click();
 						document.getElementById("final_command").innerHTML = ("Story Element Modal closed");
 					}
-					if ((final_transcript.indexOf("create story") >= 0) || (final_transcript.indexOf("creative story") >= 0) || (final_transcript.indexOf("38 story") >= 0) || (final_transcript.indexOf("predatory") >= 0)) {
+					if ((final_transcript.indexOf("create story") >= 0) || (final_transcript.indexOf("creative story") >= 0) || (final_transcript.indexOf("38 story") >= 0) 
+						|| (final_transcript.indexOf("predatory") >= 0) || (final_transcript.indexOf("create star")>= 0)) {
 						$("#story_elem_form_submit").click();
 						document.getElementById("final_command").innerHTML = ("Story Element Modal submitted");
 					}

@@ -103,8 +103,7 @@ function addPoi(name, description, lat, lon) {
         contentType: "application/json;charset=utf-8",
         success: function(data) {
             pois.clearLayers();
-            getPois();
-            console.log(data);
+            getPois(m.map);
         },
         error: function(xhr, status, err) {
 

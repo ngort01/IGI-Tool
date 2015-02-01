@@ -164,21 +164,25 @@ $(document).ready(function() {
 	// poi modal events
 	$('#POImodal').on('show.bs.modal', function(e) {
 		paused = true;
+		turnOffMapControlsPerSpeech();
 		$('#lm').tooltip('hide');
     })
 	$('#POImodal').on('hide.bs.modal', function(e) {
         remove_poi();
+		turnOnMapControlsPerSpeech();
 		paused = false;
     })
 	
 	// story modal events
 	$('#story_modal').on('hide.bs.modal', function(e) {
 		paused = false;
+		turnOnMapControlsPerSpeech();
 		storyMod = false;
     })
 	
 	$('#story_modal').on('show.bs.modal', function(e) {
 		paused = true;
+		turnOffMapControlsPerSpeech();
 		storyMod = true;
     })
 	
@@ -187,24 +191,28 @@ $(document).ready(function() {
 	$('#story_elem_modal').on('show.bs.modal', function(e) {
         $('#select').tooltip('hide');
 		paused = true;
+		turnOffMapControlsPerSpeech();
 		storyElemMod = true;
     })
 	
 	$('#story_elem_modal').on('hide.bs.modal', function(e) {
         $('#select').tooltip('show');
 		storyElemMod = false;
+		turnOnMapControlsPerSpeech();
 		paused = false;
     })
 	
 	// story_submit_modal events
 	$('#story_submit_modal').on('show.bs.modal', function(e) {
         $('#select').tooltip('hide');
+		turnOffMapControlsPerSpeech();
 		paused = true;
 		storySubMod = true;
     })
 	
 	$('#story_submit_modal').on('hide.bs.modal', function(e) {
 		storySubMod = false;
+		turnOnMapControlsPerSpeech();
 		paused = false;
     })
 	
@@ -239,7 +247,5 @@ $(document).ready(function() {
 	// hide elems on page load
 	$('#load').hide();
 	$("#voice_help").hide();
-	//$('#voice_help').popover('show');
-	//$('#zoom').tooltip('show');	
-    init();
+    init();						
 });
