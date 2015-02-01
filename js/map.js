@@ -97,7 +97,7 @@ $(document).ready(function() {
     $(document).on("menuopened", function() {
         paused = true; // pause map interactions when the menu is opened
 		menumode = true;
-		$("#poi, #story").tooltip('show');
+		$("#poi, #story, #roll").tooltip('show');
     });
 
     $(document).on("menuclosed", function() {
@@ -106,8 +106,9 @@ $(document).ready(function() {
             "opacity": "1",
             "box-shadow": "none"
         }); // remove highlighting
-		$("#poi, #story").tooltip('hide');
+		$("#poi, #story, #roll").tooltip('hide');
 		menumode = false; // disable menumode
+		$('#lm').tooltip('hide');
     });
 
     // slim scrollbar settings
@@ -147,7 +148,7 @@ $(document).ready(function() {
     });
 	
 	// gesture tooltips
-	$('#select, #lm, #close').tooltip({
+	$('#select, #lm, #close, #roll').tooltip({
         placement: "right",
 		trigger: "manual",
 		container: 'body'
@@ -162,10 +163,11 @@ $(document).ready(function() {
     });
 	
 	// poi modal events
-	$('#POImodal').on('show.bs.modal', function(e) {
+	$('#POImodal').on('shown.bs.modal', function(e) {
 		paused = true;
 		turnOffMapControlsPerSpeech();
 		$('#lm').tooltip('hide');
+		$('#poi_name').focus();
     })
 	$('#POImodal').on('hide.bs.modal', function(e) {
         remove_poi();
@@ -180,19 +182,21 @@ $(document).ready(function() {
 		storyMod = false;
     })
 	
-	$('#story_modal').on('show.bs.modal', function(e) {
+	$('#story_modal').on('shown.bs.modal', function(e) {
 		paused = true;
 		turnOffMapControlsPerSpeech();
 		storyMod = true;
+		$('#story_name').focus();
     })
 	
 	
 	// story element modal events
-	$('#story_elem_modal').on('show.bs.modal', function(e) {
+	$('#story_elem_modal').on('shown.bs.modal', function(e) {
         $('#select').tooltip('hide');
 		paused = true;
 		turnOffMapControlsPerSpeech();
 		storyElemMod = true;
+		$('#story_elem_name').focus();
     })
 	
 	$('#story_elem_modal').on('hide.bs.modal', function(e) {
@@ -203,11 +207,12 @@ $(document).ready(function() {
     })
 	
 	// story_submit_modal events
-	$('#story_submit_modal').on('show.bs.modal', function(e) {
+	$('#story_submit_modal').on('shown.bs.modal', function(e) {
         $('#select').tooltip('hide');
 		turnOffMapControlsPerSpeech();
 		paused = true;
 		storySubMod = true;
+		$('#story_submit_name').focus();
     })
 	
 	$('#story_submit_modal').on('hide.bs.modal', function(e) {

@@ -102,7 +102,7 @@ var webSpeech = function() {
 					//////////////////////////////////////////////////////////
 					/////////////////////// Multimodal////////////////////////
 					//////////////////////////////////////////////////////////
-                    } else if ((final_transcript.indexOf("create marker") >= 0)) {
+                    } else if ((final_transcript.indexOf("create marker") >= 0) || (final_transcript.indexOf("create my car") >= 0)) {
 						if (newCenter) {
 							POI = L.marker(newCenter);
 							pois.addLayer(POI);
@@ -110,6 +110,7 @@ var webSpeech = function() {
 							startFormRecording();
 							$("#poi_lat").val(POI.getLatLng().lat); // insert coordinates into the poi creation form
 							$("#poi_lon").val(POI.getLatLng().lng);
+							document.getElementById("final_command").innerHTML = ("Creating marker");
 						} else { // error handling
 							document.getElementById("final_command").innerHTML = ("Hand position not found!");
 							document.getElementById("final_command").style.color="red";
@@ -120,6 +121,7 @@ var webSpeech = function() {
 							pois.eachLayer(function (layer) {
 								if (handMarker.getBounds().contains(layer.getLatLng())) {
 									layer.fireEvent("click");
+									document.getElementById("final_command").innerHTML = ("Marker clicked");
 								}
 							});
 						} else { // error handling
