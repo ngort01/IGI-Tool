@@ -28,7 +28,7 @@ body {
 	border-radius: 6px;
 }
 
-#select, #zoom, #pan, #close,  #lm, #open_menu{
+#select, #zoom, #pan, #close,  #lm, #roll{
 	border: 1px solid #E5E5E5;
 	border-radius: 6px;
 }
