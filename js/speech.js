@@ -4,6 +4,7 @@ var recName = false;
 var recDescription = false;
 var description = '';
 var final_transcript = "";
+var poiMod = false;
 var storyMod = false;
 var storyElemMod = false;
 var storySubMod = false;
@@ -134,6 +135,7 @@ var webSpeech = function() {
                 //////////////////////////////////////////////////////////
                 /////Start recording POI Name and Description//////////////
                 //////////////////////////////////////////////////////////
+				/**
                 if ((recDescription) && ((final_transcript.indexOf("submit") >= 0) || (final_transcript.indexOf("sum") >= 0))) {
                     recDescription = false;
                     $("#poi_form_submit").click();
@@ -162,6 +164,20 @@ var webSpeech = function() {
                     final_transcript = '';
                     $('#poi_description').focus();
                 }
+				*/
+				
+				//////////////////////////////////////////////////////////
+                /////Navigation storymodal////////////////////////////////
+                //////////////////////////////////////////////////////////
+				if(poiMod) { // check for story modal
+					if ((final_transcript.indexOf("close") >= 0) || (final_transcript.indexOf("clothes") >= 0) || (final_transcript.indexOf("jaws") >= 0)) {
+						$("#poi_form_close").click();
+						document.getElementById("final_command").innerHTML = ("POI Modal closed");
+					} else if ((final_transcript.indexOf("submit") >= 0) || (final_transcript.indexOf("sum") >= 0)) {
+						$("#poi_form_submit").click();
+						document.getElementById("final_command").innerHTML = ("");					
+					}
+				}
 				
 				//////////////////////////////////////////////////////////
                 /////Navigation storymodal////////////////////////////////

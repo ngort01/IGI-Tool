@@ -165,6 +165,7 @@ $(document).ready(function() {
 	// poi modal events
 	$('#POImodal').on('shown.bs.modal', function(e) {
 		paused = true;
+		poiMod = true;
 		turnOffMapControlsPerSpeech();
 		$('#lm').tooltip('hide');
 		$('#poi_name').focus();
@@ -173,6 +174,7 @@ $(document).ready(function() {
         remove_poi();
 		turnOnMapControlsPerSpeech();
 		paused = false;
+		poiMod = false;
     })
 	
 	// story modal events
