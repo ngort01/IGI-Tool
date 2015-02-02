@@ -77,6 +77,14 @@
 		if ($id) {
 			if ($result_mode === 'full') {
 				echo 'The file "' . $name . '" has been uploaded with ID "' . $id . '".<br>';
+				
+			} elseif ($result_mode === 'json') {
+				header('Content-Type: application/json');
+				echo json_encode( array(
+							'name' => $display_name,
+							'id' => '' . $id,
+							'size' => $_FILES["new-img-file"]["size"] )
+						 );
 			} else {
 				echo $id;
 			}

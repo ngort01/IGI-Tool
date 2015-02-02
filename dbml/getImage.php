@@ -72,9 +72,23 @@
 			$file = $grid -> findOne( array('_id' => new MongoId($fileId)) );
 		
 			if ($file) {
-				header('Content-type:image/png');
-				echo $file->getBytes();
+				$imageFileType = pathinfo($file -> getFilename(), PATHINFO_EXTENSION);
+				
+				if ($imageFileType == "jpg") {
+					header('Content-type:image/jpg');
+				} elseif ($imageFileType == "png") {
+					header('Content-type:image/png');
+				} elseif ($imageFileType == "jpeg") {
+					header('Content-type:image/jpeg');
+				} elseif ($imageFileType == "gif" ) {
+					header('Content-type:image/gif');
+				} else {
+					header('Content-type:text/html');
+				}
+				
+				echo $file -> getBytes();
 			} else {
+				header('Content-type:text/html');
 				echo "No image found!";
 			}
 		

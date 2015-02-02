@@ -52,6 +52,41 @@
                             <textarea data-toggle="tooltip" title="Dictate/Enter a Description!" class="form-control" id="poi_description"></textarea>
                         </div>
                     </form>
+                    <!-- Upload Image form -->
+                    <div class="panel panel-default">
+                    	<div class="panel-heading">
+							<h3 class="panel-title">Add pictures</h3>
+						</div>
+  						<div class="panel-body">
+		                    <form class="form-horizontal" role="form" id="poi_img_form" enctype="multipart/form-data">
+		                    	<div class="form-group">
+		                            <label for="poi_img_name" class="col-sm-2 control-label">Name:</label>
+		                            <div class="col-sm-10"><input type="text" class="form-control" id="poi_img_name"></div>
+		                       	</div>
+		                       	<div class="form-group">
+		                            <label for="new-img-file" class="col-sm-2 control-label">Datei:</label>
+		                            <div class="col-sm-10"><input type="file" class="form-control" id="new-img-file" name="new-img-file"></div>
+		                            <!-- change id to "poi_img_file" here -->
+		                        </div>
+		                    </form>
+		                    <div class="form-horizontal">
+		                    	<div class="form-group">
+		                    		<div class="col-sm-2"></div>
+				                    <div class="col-sm-2"><button type="button" id="poi_img_add" class="btn btn-default">Add</button></div>
+		  							<div class="col-sm-6 progress">
+										<span class="progress-bar" role="progressbar" id="poi_img_progbar"
+											aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+										</span>
+									</div>
+									<div class="col-sm-2" id="poi_img_upload_status"></div>
+								</div>
+							</div>
+		                    <table class="table table-striped">
+								<thead id="poi_img_table_header"></thead>
+						    	<tbody id="poi_img_table"></tbody>
+						    </table>
+                    	</div>
+					</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="poi_form_close" class="btn btn-default" data-dismiss="modal" 
@@ -333,6 +368,7 @@
 	<script src="js/bootstrap-tour.min.js"></script>
 	<script src="js/tour.js"></script>
 	<script src="js/speech.js"></script>
+	<script src="js/image-uploader.js"></script>
 </body>
 
 </html>

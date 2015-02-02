@@ -8,6 +8,31 @@ var api_key = "";
 // layer group for all the pois
 var pois = new L.MarkerClusterGroup();
 
+// image upload test
+jQuery("#poi_img_add_dummy").click(function(){
+	
+	
+	if (jQuery("#poi_img_table_header").html().length == 0) {
+		jQuery("#poi_img_table_header").append(
+				"<tr><th></th><th>Name</th><th>Size (Bytes)</th></tr>"		
+			);
+	}
+	// insert dummy row
+	jQuery("#poi_img_table").append(
+		"<tr><td>+</td><td>" + jQuery("#poi_img_file").val() + "</td><td>1234 Dummy</td></tr>"		
+	);
+	
+	// set progress bar
+	var prog_val = getRandomInt(2, 100);
+	jQuery("#poi_img_progbar")
+		.attr("aria-valuenow", prog_val)
+		.attr("style", "width: " + prog_val + "%;");
+});
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 /**
 get and create pois
 **/
@@ -39,10 +64,18 @@ function createPois(obj, map) {
         var p = L.marker([lat, lon], {
             title: obj._id.$oid
         });
-        p.bindPopup("<p><b>"+ obj.name+"<hr></b></p>"
-        		+ createPoiImageList(obj)
-        		+ "<hr>"
-        		+ obj.description);
+        
+        var img_list = createPoiImageList(obj);
+        if (img_list !== "") {
+	        p.bindPopup("<p><b>"+ obj.name+"<hr></b></p>"
+	        		+ createPoiImageList(obj)
+	        		+ "<hr>"
+	        		+ obj.description);
+        } else {
+        	p.bindPopup("<p><b>"+ obj.name+"<hr></b></p>"
+	        		+ obj.description);
+        }
+        
         p.on('click', function(e) {
             if (creating_story == true) { // if in story creation mode
                 p.togglePopup(); // prevent popup from showing
@@ -70,13 +103,13 @@ function createPoiImageList(poi) {
 			for (var pic of poi.picture) {
 				
 				img_list += '<img src="' + getImage_url + '?oid=' + pic.data.$oid
-					+ '" alt="' + pic.name + '" width="50" height="50"/>';
+					+ '" alt="' + pic.name + '" width="50" height="50" style="padding:1px" />';
 			}
 		} else {
 			
 			var pic = poi.picture;
 			img_list += '<img src="' + getImage_url + '?oid=' + pic.data.$oid
-			+ '" alt="' + pic.name + '" width="50" height="50"/>';
+				+ '" alt="' + pic.name + '" width="50" height="50" style="padding:1px" />';
 		}
 	}
 	return img_list;
@@ -87,21 +120,29 @@ Inserts POI into the database
 TO DO: handle cases with and without media
 **/
 function addPoi(name, description, lat, lon) {
+	
+	addPoi(name, description, lat, lon, null);
+}
 
-    jQuery.ajax({
-        url: poi_url + "?apiKey=" + api_key,
-        data: JSON.stringify({
+function addPoi(name, description, lat, lon, image_array) {
+
+	var json_data = JSON.stringify({
             "name": name,
             "description": description,
             "location": {
                 "type": "Point",
                 "coordinates": [lat, lon]
             }
-        }),
+        });
+	
+    jQuery.ajax({
+        url: poi_url + "?apiKey=" + api_key,
+        data: json_data,
         type: "POST",
         async: true,
         contentType: "application/json;charset=utf-8",
         success: function(data) {
+        	addImagesToPoi(data._id.$oid);
             pois.clearLayers();
             getPois(m.map);
         },
@@ -145,6 +186,6 @@ function submit_POI() {
     var lat = parseFloat($("#poi_lat").val());
     var lon = parseFloat($("#poi_lon").val());
     var descr = $("#poi_description").val();
-    addPoi(name, descr, lat, lon);
+    addPoi(name, descr, lat, lon, poi_img_list);
     $('#POImodal').modal('toggle');
 }

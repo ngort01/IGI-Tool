@@ -27,6 +27,14 @@
 		} else {
 			echo 'RESULT MODE UNCHECKED<br>';
 		}
+		
+		if (isset($_POST["submit"])) {
+			echo 'isset($_POST[submit]) = true<br>';
+		} else {
+			echo 'isset($_POST[submit]) = false<br>';
+		}
+		
+		echo 'IMAGE FILE TYPE = ' . $imageFileType . '<br>';
 	}	
 
 	// Check if image file is a actual image or fake image
@@ -58,6 +66,8 @@
 		if ($result_mode === 'full') {
 			if ($result_mode === 'full') {
 				echo "Sorry, your file is too large.<br>";
+			} else {
+				echo "File size is small enough.<br>";
 			}
 		}
 		$uploadOk = 0;

@@ -26,9 +26,13 @@
 	$img_oid = $_REQUEST['new_img_oid'];
 	$display_name = $_REQUEST['display_name'];
 	
-	echo 'poi_oid = ' . $poi_oid . '<br>';
-	echo 'img_oid = ' . $img_oid . '<br>';
-	echo 'display_name = ' . $display_name . '<br>';
+	$result_mode = $_REQUEST['result_mode'];
+	
+	if ($result_mode === 'full') {
+		echo 'poi_oid = ' . $poi_oid . '<br>';
+		echo 'img_oid = ' . $img_oid . '<br>';
+		echo 'display_name = ' . $display_name . '<br>';
+	}
 
 	if ($poi_oid !== '' && $img_oid !== '' && $display_name !== '') {
 	
@@ -38,7 +42,9 @@
 		if (count($poi['picture']['data']) == 1) {
 	
 			// create an array from the existing picture and the new one
-			echo 'Adding picture to POI...<br>Creating array from pictures...<br>';
+			if ($result_mode === 'full') {
+				echo 'Adding picture to POI...<br>Creating array from pictures...<br>';
+			}
 			
 			$collection -> update(
 				array('_id' => new MongoId($poi_oid)),
@@ -55,7 +61,9 @@
 		} else {
 		
 			// add new picture to array or create a new array
-			echo 'Adding picture to POI...<br>';
+			if ($result_mode === 'full') {
+				echo 'Adding picture to POI...<br>';
+			}
 
 			// TODO can "array('_id' => new MongoId($poi_oid)" be replaced by $poi?
 			$collection -> update(
@@ -64,23 +72,27 @@
 				);
 			}
 	
-			// check if picture is part of the POI
-			$cur = $collection -> find(
-					array(
-						'_id' => new MongoId($poi_oid),
-						'picture.data' => new MongoId($img_oid)
-					)
-				) -> limit(1);
-				
-			$count = $cur -> count();
-			if ($count > 0) {
-				echo 'The image "' . $display_name . '" has been added to POI "' . $poi_oid . '".<br>';
-			} else {
-				echo 'The image "' . $display_name . '" could not be added to POI "' . $poi_oid . '".<br>';
+			if ($result_mode === 'full') {
+				// check if picture is part of the POI
+				$cur = $collection -> find(
+						array(
+							'_id' => new MongoId($poi_oid),
+							'picture.data' => new MongoId($img_oid)
+						)
+					) -> limit(1);
+					
+				$count = $cur -> count();
+				if ($count > 0) {
+					echo 'The image "' . $display_name . '" has been added to POI "' . $poi_oid . '".<br>';
+				} else {
+					echo 'The image "' . $display_name . '" could not be added to POI "' . $poi_oid . '".<br>';
+				}
 			}
 	} else {
 		
-		echo 'Missing information. Could not add picture to POI.'; 
+		if ($result_mode === 'full') {
+			echo 'Missing information. Could not add picture to POI.'; 
+		}
 	}
 
 	// Since this is an example, we'll clean up after ourselves.
